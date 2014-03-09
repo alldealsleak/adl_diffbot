@@ -1,4 +1,5 @@
 *.log
 *.pot
 *.pyc
+creds.txt
 local_settings.py
