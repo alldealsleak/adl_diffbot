@@ -4,9 +4,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'adl_diffbot.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
+    url(r'^add-current-urls/$', 'main.views.add_current_urls', name='add-current-urls'),
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
+
     'main',
 )
 
@@ -82,3 +82,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates')
+)
+
+DIFFBOT_URL = 'http://api.diffbot.com/v2/product'
+DIFFBOT_TOKEN = os.environ.get('ADL_DIFFBOT_TOKEN', '953051970fc6bd63d53ca290c11651e2')
