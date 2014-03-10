@@ -1,1 +1,4 @@
 Django==1.6.2
+South==0.8.4
+diffbot==1.1.2
+psycopg2==2.5.2
