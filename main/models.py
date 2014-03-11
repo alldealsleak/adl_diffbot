@@ -39,7 +39,7 @@ class Media(models.Model):
 
 
 class Product(models.Model):
-    product_id = models.CharField(max_length=50)
+    product_id = models.CharField(max_length=100)
     link = models.URLField(max_length=500)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
