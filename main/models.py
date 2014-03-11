@@ -28,7 +28,7 @@ class CurrentUrl(models.Model):
 
 
 class Media(models.Model):
-    caption = models.CharField(max_length=50, blank=True)
+    caption = models.CharField(max_length=500, blank=True)
     link = models.URLField(max_length=500)
 
     class Meta:
@@ -41,11 +41,11 @@ class Media(models.Model):
 class Product(models.Model):
     product_id = models.CharField(max_length=100)
     link = models.URLField(max_length=500)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     offer_price = models.FloatField(blank=True, null=True)
     regular_price = models.FloatField(blank=True, null=True)
-    merchant = models.CharField(max_length=20, blank=True)
+    merchant = models.CharField(max_length=50, blank=True)
     media = models.ForeignKey('Media', blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
