@@ -3,12 +3,16 @@ import time
 import urllib
 import urllib2
 
+import diffbot
+
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+
 
 from main.models import (
     CurrentUrl,
     Company,
+    Media,
     ProductSingapore,
 )    
 
@@ -22,24 +26,43 @@ class Command(BaseCommand):
         except IndexError:
             self.stdout.write('Please supply country code')
 
+        client = diffbot.Client(token=settings.DIFFBOT_TOKEN)
+
         count = 0
         if country_code == 'sg':
             urls = CurrentUrl.objects.filter(country=country_code)[:10]
             while (urls):
                 for url in urls:
-                    url_crawl = '{}?token={}&url={}'.format(settings.DIFFBOT_URL, settings.DIFFBOT_TOKEN, url.link)
-                    response = urllib2.urlopen(url_crawl)
-                    data = json.load(response)
-                    product_json = data['products'][0]
-                    product, created = ProductSingapore.objects.get_or_create(product_id=product_json['productId'], company=url.company)
+                    data = client.product(url.link)
+                    product_json = data.get('products')
 
-                    if created:
-                        product.link = url
-                        product.title = product_json['title']
-                        product.description = product_json['description']
-                        product.offer_price = product_json['offerPrice']
-                        product.merchange = product_json['brand']
-                        product.save()
+                    if product_json:
+                        product_json = product_json[0]
+                        product, created = ProductSingapore.objects.get_or_create(
+                            product_id = product_json.get('productId'),
+                            company = url.company
+                        )
+
+                        if created:
+                            product.link = url.link
+                            product.title = product_json.get('title')
+                            product.description = product_json.get('description')
+                            product.offer_price = float(product_json.get('offerPrice')) if product_json.get('offerPrice') else 0.0
+                            product.regular_price = float(product_json.get('regularPrice')) if product_json.get('regularPrice') else 0.0
+                            product.merchange = product_json.get('brand')
+
+                            media_json = product_json.get('media')
+
+                            if media_json:
+                                media_json = media_json[0]
+                                media_link = media_json.get('link')
+                                media_caption = media_json.get('caption')
+                                media, created = Media.objects.get_or_create(
+                                    caption = media_caption,
+                                    link = media_link
+                                )
+                                product.media = media
+                            product.save()
 
                     url.delete()
                     urls = CurrentUrl.objects.filter(country=country_code)[:10]
