@@ -1,4 +1,5 @@
 import json
+import time
 import urllib
 import urllib2
 
@@ -21,6 +22,7 @@ class Command(BaseCommand):
         except IndexError:
             self.stdout.write('Please supply country code')
 
+        count = 0
         if country_code == 'sg':
             urls = CurrentUrl.objects.filter(country=country_code)[:10]
             while (urls):
@@ -40,6 +42,7 @@ class Command(BaseCommand):
                         product.save()
 
                     url.delete()
-                    # urls = CurrentUrl.objects.filter(country=country_code)[:1]
-                    urls = None
-        # self.stdout.write('Successfully closed poll "%s"' % poll_id)
+                    urls = CurrentUrl.objects.filter(country=country_code)[:10]
+                    count += 1
+                    time.sleep(1)
+        self.stdout.write('Successfully crawled %s urls' % count)
