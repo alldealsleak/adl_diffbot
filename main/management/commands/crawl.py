@@ -33,6 +33,7 @@ class Command(BaseCommand):
             urls = CurrentUrl.objects.filter(country=country_code)[:10]
             while (urls):
                 for url in urls:
+                    print url.link
                     data = client.product(url.link)
                     product_json = data.get('products')
 
@@ -56,7 +57,7 @@ class Command(BaseCommand):
                             if media_json:
                                 media_json = media_json[0]
                                 media_link = media_json.get('link')
-                                media_caption = media_json.get('caption')
+                                media_caption = media_json.get('caption') if media_json.get('caption') else 'No caption'
                                 media, created = Media.objects.get_or_create(
                                     caption = media_caption,
                                     link = media_link
@@ -65,6 +66,10 @@ class Command(BaseCommand):
                             product.save()
 
                     url.delete()
+
+                    print product
+                    print ''
+
                     urls = CurrentUrl.objects.filter(country=country_code)[:10]
                     count += 1
                     time.sleep(1)
