@@ -9,7 +9,7 @@ EMAIL_PORT = 1025
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'adl_diffbot',
+        'NAME': 'adl_diffbot_db',
         'USER': 'adl_postgres',
         'PASSWORD': 'Alldealsleak123',
         'HOST': 'localhost',
