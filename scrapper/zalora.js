@@ -7,15 +7,16 @@ var company = 'zalora';
 var country_code = 'sg';
 
 var mainUrl = 'http://www.zalora.sg';
-var url = 'http://www.zalora.sg/beauty/';
+var start_url = 'http://www.zalora.sg/beauty/';
 var dealUrls = [];
-var token = '953051970fc6bd63d53ca290c11651e2';
-var diffbotUrl = 'http://api.diffbot.com/v2/product'
+
+var localhost = 'http://localhost:8000/add-current-urls/';
+var dev = 'http://128.199.213.210/add-current-urls/'
 
 
 function printDeals() {
     request.post(
-        'http://localhost:8000/add-current-urls/',
+        dev,
         {form: {
             data: JSON.stringify({urls: dealUrls}),
             company: company,
@@ -33,7 +34,7 @@ function printDeals() {
 }
 
 (function loop() {
-    request(url, function (err, resp, body) {
+    request(start_url, function (err, resp, body) {
         if (err)
             throw err;
         $ = cheerio.load(body);
@@ -45,25 +46,10 @@ function printDeals() {
         });
 
         if (nextPage) {
-            url = 'http://www.zalora.sg' + nextPage;
+            start_url = 'http://www.zalora.sg' + nextPage;
             loop();
         } else {
             printDeals();
         }
     });
 }());
-
-
-
-{
-    u'description': u'Item is non-refundable and non-returnable.\nFormulated with the revolutionary Stem-Acanax Complex that penetrates deep to improve skin from within. Pores to be less visible in 1 day. Improves radical firmness in 10 days. So you can feel the youthful beauty of 10 years ago.\nSize: 80g',
-    u'title': u'STEMPOWER 80g',
-    u'media':
-        [{u'xpath': u'/html[1]/body[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/div[2]/a[1]/span[2]/img[1]', 
-        u'caption': u'STEMPOWER 80g',
-        u'link': u'http://static04-sg.zalora.com/p/sk-ii-1405-23069-1-product.jpg',
-        u'primary': True, u'type': u'image'}],
-    u'brand': u'SK-II',
-    u'offerPrice': u'219.00',
-    u'availability': True,
-    u'productId': u'SK790BE67MBOSG'}
