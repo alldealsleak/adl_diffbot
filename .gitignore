@@ -3,3 +3,4 @@
 *.pyc
 creds.txt
 local_settings.py
+/adl_diffbot/media/*

@@ -1,4 +1,8 @@
 Django==1.6.2
+Markdown==2.4
 South==0.8.4
 diffbot==1.1.2
+django-filter==0.7
+djangorestframework==2.3.13
+openpyxl==1.8.4
 psycopg2==2.5.2
