@@ -37,8 +37,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'crispy_forms',
     'south',
-    
+
+    'accounts',
     'main',
 )
 
@@ -83,10 +85,16 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates')
@@ -94,3 +102,5 @@ TEMPLATE_DIRS = (
 
 DIFFBOT_URL = 'http://api.diffbot.com/v2/product'
 DIFFBOT_TOKEN = os.environ.get('ADL_DIFFBOT_TOKEN', '953051970fc6bd63d53ca290c11651e2')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

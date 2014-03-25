@@ -2,12 +2,18 @@ import json
 
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 
 from .models import (
     COUNTRY_CHOICES,
     CurrentUrl,
     Company,
 )
+
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
+
 
 @csrf_exempt
 def add_current_urls(request):
