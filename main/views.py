@@ -2,13 +2,14 @@ import json
 
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from .models import (
     COUNTRY_CHOICES,
     CurrentUrl,
     Company,
 )
+from .utils import PRODUCT_CLASSES
 
 
 class HomeView(TemplateView):
@@ -30,3 +31,17 @@ def add_current_urls(request):
             )
     context = {}
     return render(request, 'home.html', context)
+
+
+class ProductListView(ListView):
+    context_object_name = 'products'
+    template_name = 'products.html'
+    context_object_name = 'product_list'
+
+    def get_queryset(self):
+        company_id = self.request.GET.get('company_id', 1)
+        country_code = self.request.GET.get('country_code', 'sg')
+        product_class = PRODUCT_CLASSES[country_code]
+        products = product_class.objects.filter(company__id=company_id)
+        
+        return products

@@ -10,11 +10,11 @@
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.css" rel="stylesheet">
 
+    {% block import_css %}
+    {% endblock %}
+
     <!-- SB Admin CSS - Include with every page -->
     <link href="{{ STATIC_URL }}css/sb-admin.css" rel="stylesheet">
-
-    {% block extra_css %}
-    {% endblock %}
 </head>
 
 <body>
@@ -70,7 +70,7 @@
                         <!-- /input-group -->
                     </li>
                     <li class="active">
-                        <a href="#"><i class="fa fa-files-o fa-fw"></i> Companies<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-files-o fa-fw"></i> Products<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="blank.html">Zalora</a>
@@ -86,14 +86,8 @@
         <!-- /.navbar-static-side -->
 
         <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    {% block page_wrapper %}
-                    {% endblock %}
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
+            {% block page_wrapper %}
+            {% endblock %}
         </div>
 
         {% endif %}
@@ -109,6 +103,9 @@
     <script src="{{ STATIC_URL }}js/jquery-1.10.2.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    {% block import_js %}
+    {% endblock %}
 
     <!-- SB Admin Scripts - Include with every page -->
     <script src="{{ STATIC_URL }}js/sb-admin.js"></script>

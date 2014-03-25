@@ -8,12 +8,11 @@ from main.views import HomeView
 
 admin.autodiscover()
 
-
-
 urlpatterns = patterns('',
     url(r'^$', login_required(HomeView.as_view()), name='home'),
     url(r'^add-current-urls/$', 'main.views.add_current_urls', name='add-current-urls'),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'', include('main.urls')),
 
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
