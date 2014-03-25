@@ -43,14 +43,14 @@ class Command(BaseCommand):
                             product_id = product_json.get('productId'),
                             company = url.company
                         )
-
+                        product.merchant = product_json.get('brand') if product_json.get('brand') else ''
                         if created:
                             product.link = url.link
                             product.title = product_json.get('title')
                             product.description = product_json.get('description')
                             product.offer_price = float(product_json.get('offerPrice')) if product_json.get('offerPrice') else 0.0
                             product.regular_price = float(product_json.get('regularPrice')) if product_json.get('regularPrice') else 0.0
-                            product.merchange = product_json.get('brand')
+                            product.merchant = product_json.get('brand') if product_json.get('brand') else ''
 
                             media_json = product_json.get('media')
 
@@ -63,7 +63,7 @@ class Command(BaseCommand):
                                     link = media_link
                                 )
                                 product.media = media
-                            product.save()
+                        product.save()
 
                     url.delete()
 

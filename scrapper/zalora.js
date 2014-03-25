@@ -11,7 +11,7 @@ var start_url = 'http://www.zalora.sg/beauty/';
 var dealUrls = [];
 
 var localhost = 'http://localhost:8000/add-current-urls/';
-var dev = 'http://128.199.213.210/add-current-urls/'
+var dev = 'http://128.199.213.210/add-current-urls/';
 
 
 function printDeals() {
