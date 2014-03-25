@@ -47,7 +47,7 @@ class Command(BaseCommand):
                         if created:
                             product.link = url.link
                             product.title = product_json.get('title')
-                            product.description = product_json.get('description')
+                            product.description = product_json.get('description') if product_json.get('description') else ''
                             product.offer_price = float(product_json.get('offerPrice')) if product_json.get('offerPrice') else 0.0
                             product.regular_price = float(product_json.get('regularPrice')) if product_json.get('regularPrice') else 0.0
                             product.merchant = product_json.get('brand') if product_json.get('brand') else ''
