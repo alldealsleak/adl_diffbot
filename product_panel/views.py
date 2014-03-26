@@ -42,7 +42,7 @@ class ProductListView(JSONResponseMixin, ListView):
             self.output.update({
                 "sEcho" : int(self.request.GET.get('sEcho', 1)),
                 "iTotalRecords" : self.total_records,
-                "iTotalDisplayRecords" : len(self.products),
+                "iTotalDisplayRecords" : self.total_records,
                 "aaData" : prod_arr
             })
 
