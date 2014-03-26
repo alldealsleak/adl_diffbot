@@ -14,6 +14,7 @@ class LoginView(FormView):
     def form_valid(self, form):
         if form.user_cache:
             login(self.request, form.user_cache)
+        self.success_url = self.request.GET.get('next', '/')
         return super(LoginView, self).form_valid(form)
 
     def form_invalid(self, form):
