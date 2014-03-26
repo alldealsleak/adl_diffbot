@@ -20,8 +20,10 @@ class ProductListingView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         countries = COUNTRY_CHOICES
+        companies = Company.objects.all()
         context = {
             'countries': COUNTRY_CHOICES,
+            'companies': companies,
         }
         return render(request, self.template_name, context)
 
