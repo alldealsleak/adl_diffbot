@@ -13,6 +13,5 @@ urlpatterns = patterns('',
     url(r'^add-current-urls/$', 'main.views.add_current_urls', name='add-current-urls'),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('main.urls')),
-
+    url(r'', include('product_panel.urls')),
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
