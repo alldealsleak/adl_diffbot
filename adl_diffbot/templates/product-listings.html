@@ -101,6 +101,12 @@
         </tr>
     </thead>
 </table>
+
+<div class="overlay"> 
+    <div class="loader">
+        <h1><i class="fa fa-spinner fa-spin spin-big"></i> Processing...</h1>
+    </div>
+</div>
 {% endblock %}
 
 {% block import_js %}
@@ -108,13 +114,5 @@
     <script src="{{ STATIC_URL }}js/plugins/dataTables/jquery.dataTables.js"></script>
     <script src="{{ STATIC_URL }}js/plugins/dataTables/dataTables.bootstrap.js"></script>
     <script src="{{ STATIC_URL }}js/product-listings.js"></script>
-{% endblock %}
-
-{% block extra_js %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#btn-refresh').click(drawTable);
-    });
-</script>
 {% endblock %}
 

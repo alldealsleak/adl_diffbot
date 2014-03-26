@@ -1,3 +1,7 @@
+$(document).on('click', '#btn-refresh', function(){
+    drawTable();
+});
+
 function drawTable() {
     $('.table-responsive').empty();
     $('#products_list_template').clone(true).attr('id', 'products_list_table').removeAttr('style').appendTo('.table-responsive');
@@ -5,8 +9,10 @@ function drawTable() {
     var productsTable = $('#products_list_table').dataTable({
         'bServerSide': true,
         'sAjaxSource': '/products/',
-        'bProcessing': true,
         'iDisplayLength': 25,
+        'fnServerParams': function (aoData) {
+            $('.overlay').show();
+        },
         'fnServerData': function(sSource, aoData, fnCallback) {
             sSource += '?' + $("#product_filter_form").serialize();
             $.ajax({
@@ -36,6 +42,7 @@ function drawTable() {
                 $('.dataTables_paginate.paging_full_numbers:not(copy)').clone(true).addClass("copy").prependTo("#products_list_table_wrapper");
             });
 
+            $('.overlay').hide();
         }
 
     });
