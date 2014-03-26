@@ -18,12 +18,12 @@ from .utils import display_product_row
 class ProductListingView(TemplateView):
     template_name = 'product-listings.html'
 
-    # def get(self, request, *args, **kwargs):
-    #     hashtags = Hashtag.objects.all().order_by('-modified')
-    #     context = {
-    #         'hashtags': hashtags,
-    #     }
-    #     return render(request, self.template_name, context)
+    def get(self, request, *args, **kwargs):
+        countries = COUNTRY_CHOICES
+        context = {
+            'countries': COUNTRY_CHOICES,
+        }
+        return render(request, self.template_name, context)
 
 
 class ProductListView(JSONResponseMixin, ListView):
@@ -58,8 +58,17 @@ class ProductListView(JSONResponseMixin, ListView):
             'regular_price',
             'main_media.link',
         ]
-        company_id = self.request.GET.get('company_id', 2)
+        company_ids = self.request.GET.getlist('companies', [])
+        company_ids = [int(id) for id in company_ids]
+        if len(company_ids) > 1:
+            company_ids_str = str(company_ids).strip('[]')
+        elif len(company_ids) == 1:
+            company_ids_str = company_ids[0]
+        else:
+            company_ids_str = '0'
         country_code = self.request.GET.get('country_code', 'sg')
+
+
 
         i_start = self.request.GET.get('iDisplayStart', 0)
         i_length = self.request.GET.get('iDisplayLength', 10)
@@ -75,7 +84,10 @@ class ProductListView(JSONResponseMixin, ListView):
                 offer_price, regular_price, {0}.link, main_media.link
                 FROM {0} LEFT JOIN main_media ON 
                 {0}.media_id=main_media.id
-                WHERE title ILIKE '%{1}%'
+                JOIN main_company ON
+                {0}.company_id=main_company.id WHERE
+                {0}.company_id IN ({6})
+                AND title ILIKE '%{1}%'
                 ORDER BY {4} {5}
                 LIMIT {2} OFFSET {3}
                 """.format(
@@ -85,12 +97,13 @@ class ProductListView(JSONResponseMixin, ListView):
                     i_start,
                     p_columns[i_sort],
                     s_sort_dir,
+                    company_ids_str,
                 )
         cur.execute(query_str)
         self.products = cur.fetchall()
 
         self.total_records = PRODUCT_CLASSES[country_code].objects.filter(
-            title__icontains=s_search,
+            title__icontains=s_search, company__in=company_ids
         ).count()
         
         return self.products

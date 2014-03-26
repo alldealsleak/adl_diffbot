@@ -9,29 +9,50 @@
 {% block sidebar %}
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
-        <ul class="nav" id="side-menu">
-            <li class="sidebar-search">
-                    <select id="country" name="country" class="form-control">
-                        <option>Disabled select</option>
-                        <option>Disabled select</option>
-                        <option>Disabled select</option>
-                    </select>
-            </li>
-            <li class="active">
-                <a href="#"><i class="fa fa-files-o fa-fw"></i> Companies<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    {% for company in companies %}
-                    <li>
-                        <a href="{% url 'products' %}?company_id={{ company.id }}&country_code=sg">{{ company.name }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                <!-- /.nav-second-level -->
-            </li>
-        </ul>
-        <!-- /#side-menu -->
+        <form id="product_filter_form">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                        <select id="country" name="country_code" class="form-control">
+                            {% for country in countries %}
+                                <option value="{{ country.0 }}">{{ country.1 }}</option>
+                            {% endfor %}
+                        </select>
+                </li>
+                <li class="active">
+                    <a href="#"><i class="fa fa-files-o fa-fw"></i> Companies<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        {% for company in companies %}
+                        <li>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="companies" type="checkbox" value="{{ company.id }}">{{ company.name }}
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="companies" type="checkbox" value="3">wew
+                                </label>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+            </ul>
+            <!-- /#side-menu -->
+        </form>
+        <!-- /#product_filter_form -->
     </div>
     <!-- /.sidebar-collapse -->
+    <div class="actions">
+        <button id="btn-refresh" type="button" class="btn btn-primary btn-xl">
+            <i class="fa fa-refresh"></i>
+            Refresh
+        </button>
+    </div>
+    <!-- /.actions -->
 </nav>
 <!-- /.navbar-static-side -->
 {% endblock %}
@@ -92,7 +113,7 @@
 {% block extra_js %}
 <script type="text/javascript">
     $(document).ready(function() {
-        drawTable();
+        $('#btn-refresh').click(drawTable);
     });
 </script>
 {% endblock %}

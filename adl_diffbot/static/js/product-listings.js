@@ -4,8 +4,40 @@ function drawTable() {
 
     var productsTable = $('#products_list_table').dataTable({
         'bServerSide': true,
-        'sAjaxSource': '/products/?company_id=2&country_code=sg',
-        'bProcessing': true
+        'sAjaxSource': '/products/',
+        'bProcessing': true,
+        'iDisplayLength': 25,
+        'fnServerData': function(sSource, aoData, fnCallback) {
+            sSource += '?' + $("#product_filter_form").serialize();
+            $.ajax({
+                'dataType': 'json',
+                'type': 'GET',
+                'url': sSource,
+                'data': aoData,
+                'success': [fnCallback]
+            });
+        },
+        'fnDrawCallback': function( oSettings ) {
+            /* Every time we re-draw the table we copy the pagination bar into
+               the upper side of the screen.
+            */
+
+            $('.dataTables_paginate.paging_full_numbers.copy').remove();
+            $('.dataTables_paginate.paging_full_numbers:not(copy)').clone(true).addClass("copy").prependTo("#products_list_table_wrapper");
+
+
+            $('input[aria-controls="products_list_table"]').keypress(function() {
+                $('.dataTables_paginate.paging_full_numbers.copy').remove();
+                $('.dataTables_paginate.paging_full_numbers:not(copy)').clone(true).addClass("copy").prependTo("#products_list_table_wrapper");
+            });
+
+            $('[aria-controls="products_list_table"][name="products_list_table_length"]').change(function() {
+                $('.dataTables_paginate.paging_full_numbers.copy').remove();
+                $('.dataTables_paginate.paging_full_numbers:not(copy)').clone(true).addClass("copy").prependTo("#products_list_table_wrapper");
+            });
+
+        }
+
     });
 
     // Filter box submits only after the user has finished typing

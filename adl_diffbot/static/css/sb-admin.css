@@ -121,6 +121,10 @@
     padding-left: 37px;
 }
 
+.nav-second-level li div {
+    padding-left: 60px;
+}
+
 .nav-third-level li a {
     padding-left: 52px;
 }
