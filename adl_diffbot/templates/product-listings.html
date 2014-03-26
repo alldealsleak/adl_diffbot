@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block import_css %}
+<!-- Page-Level Plugin CSS - Tables -->
+<link href="{{ STATIC_URL }}css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block sidebar %}
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <form id="product_filter_form">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                        <select id="country" name="country_code" class="form-control">
+                            {% for country in countries %}
+                                <option value="{{ country.0 }}">{{ country.1 }}</option>
+                            {% endfor %}
+                        </select>
+                </li>
+                <li class="active">
+                    <a href="#"><i class="fa fa-files-o fa-fw"></i> Companies<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        {% for company in companies %}
+                        <li>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="companies" type="checkbox" value="{{ company.id }}">{{ company.name }}
+                                </label>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+            </ul>
+            <!-- /#side-menu -->
+        </form>
+        <!-- /#product_filter_form -->
+    </div>
+    <!-- /.sidebar-collapse -->
+    <div class="actions">
+        <button id="btn-refresh" type="button" class="btn btn-primary btn-xl">
+            <i class="fa fa-refresh"></i>
+            Refresh
+        </button>
+    </div>
+    <!-- /.actions -->
+</nav>
+<!-- /.navbar-static-side -->
+{% endblock %}
+
+{% block page_wrapper %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Products</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Zalora Products
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <div class="alert alert-info text-center">
+                        <h1><i class="fa fa-warning"></i> No data available. Click refresh to load data.</h1>
+                    </div>
+                </div>
+                <!-- /.table-responsive -->
+             </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<table class="table table-striped table-bordered table-hover" id="products_list_template" style="display: none;">
+    <thead>
+        <tr>
+            <th width="30%">Title</th>
+            <th width="20%">Brand</th>
+            <th width="15%">Date</th>
+            <th width="10%">Offer Price</th>
+            <th width="10%">Regular Price</th>
+            <th width="10%">Image</th>
+        </tr>
+    </thead>
+</table>
+
+<div class="overlay"> 
+    <div class="loader">
+        <h1><i class="fa fa-spinner fa-spin spin-big"></i> Processing...</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block import_js %}
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="{{ STATIC_URL }}js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}js/product-listings.js"></script>
+{% endblock %}
+
