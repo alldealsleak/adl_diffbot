@@ -35,15 +35,14 @@ class ProductListView(JSONResponseMixin, ListView):
         context = super(ProductListView, self).get_context_data(**kwargs)
         if self.request.is_ajax():
             prod_arr = []
-            total_records = len(self.products)
 
             for product in self.products:
                 prod_arr.append(display_product_row(product))
 
             self.output.update({
                 "sEcho" : int(self.request.GET.get('sEcho', 1)),
-                "iTotalRecords" : total_records,
-                "iTotalDisplayRecords" : total_records,
+                "iTotalRecords" : self.total_records,
+                "iTotalDisplayRecords" : len(self.products),
                 "aaData" : prod_arr
             })
 
@@ -70,8 +69,6 @@ class ProductListView(JSONResponseMixin, ListView):
 
         cur = connection.cursor()
 
-        print p_columns[i_sort]
-        print s_sort_dir
         query_str = """
                 SELECT product_id, title, merchant,
                 extract(epoch from {0}.created) as created,
@@ -79,16 +76,17 @@ class ProductListView(JSONResponseMixin, ListView):
                 FROM {0} LEFT JOIN main_media ON 
                 {0}.media_id=main_media.id
                 WHERE title ILIKE '%{1}%'
-                ORDER BY {4} {5}
-                LIMIT {2} OFFSET {3}
+                ORDER BY {2} {3}
                 """.format(
                     PRODUCT_TABLES[country_code],
                     s_search,
-                    i_length,
-                    i_start,
                     p_columns[i_sort],
                     s_sort_dir,
                 )
+        cur.execute(query_str)
+        self.total_records = len(cur.fetchall())
+
+        query_str = '{0} LIMIT {1} OFFSET {2}'.format(query_str, i_length, i_start)
         cur.execute(query_str)
         self.products = cur.fetchall()
         
