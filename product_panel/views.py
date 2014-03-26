@@ -76,19 +76,22 @@ class ProductListView(JSONResponseMixin, ListView):
                 FROM {0} LEFT JOIN main_media ON 
                 {0}.media_id=main_media.id
                 WHERE title ILIKE '%{1}%'
-                ORDER BY {2} {3}
+                ORDER BY {4} {5}
+                LIMIT {2} OFFSET {3}
                 """.format(
                     PRODUCT_TABLES[country_code],
                     s_search,
+                    i_length,
+                    i_start,
                     p_columns[i_sort],
                     s_sort_dir,
                 )
         cur.execute(query_str)
-        self.total_records = len(cur.fetchall())
-
-        query_str = '{0} LIMIT {1} OFFSET {2}'.format(query_str, i_length, i_start)
-        cur.execute(query_str)
         self.products = cur.fetchall()
+
+        self.total_records = PRODUCT_CLASSES[country_code].objects.filter(
+            title__icontains=s_search,
+        ).count()
         
         return self.products
 
