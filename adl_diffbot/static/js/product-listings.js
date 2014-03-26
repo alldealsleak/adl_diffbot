@@ -10,6 +10,9 @@ function drawTable() {
         'bServerSide': true,
         'sAjaxSource': '/products/',
         'iDisplayLength': 25,
+        'oLanguage': {
+            'sSearch': 'Search: '
+        },
         'fnServerParams': function (aoData) {
             $('.overlay').show();
         },
@@ -27,7 +30,6 @@ function drawTable() {
             /* Every time we re-draw the table we copy the pagination bar into
                the upper side of the screen.
             */
-
             $('.dataTables_paginate.paging_full_numbers.copy').remove();
             $('.dataTables_paginate.paging_full_numbers:not(copy)').clone(true).addClass("copy").prependTo("#products_list_table_wrapper");
 
@@ -52,16 +54,27 @@ function drawTable() {
 
     // On keyup, start the countdown
     $('#products_list_table_filter input').unbind(
-        'keypress keyup').bind(
-            'keypress keyup', function(e) {
+        'keyup.DT search.DT input.DT paste.DT cut.DT').bind(
+            'keypress', function(e) {
                 typingTimer = setTimeout(function() {
                     productsTable.fnFilter($('#products_list_table_filter input').val());
-            }, 1200);
+                }, 500);
+    });
+
+    // On keyup, start the countdown
+    $('#products_list_table_filter input').unbind(
+        'keyup.DT search.DT input.DT paste.DT cut.DT').bind(
+            'keyup', function(e) {
+                if (e.keyCode == 8)
+                    typingTimer = setTimeout(function() {
+                        productsTable.fnFilter($('#products_list_table_filter input').val());
+                    }, 500);
     });
 
     // On keydown, clear the countdown
-    $('#products_list_table_filter input').unbind('keypress keydown').bind(
-        'keypress keydown', function(e) {
+    $('#products_list_table_filter input').unbind('keyup.DT search.DT input.DT paste.DT cut.DT')
+    .bind('keydown', function(e) {
         clearTimeout(typingTimer);
     });
+    
 }
