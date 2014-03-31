@@ -27,23 +27,23 @@ var requestUrl = dev;
 
 
 function printDeals(category, productUrls) {
-    // request.post(
-    //     requestUrl,
-    //     {form: {
-    //         data: JSON.stringify({product_urls: productUrls}),
-    //         company: company,
-    //         category: category,
-    //         country_code: country_code
-    //     }},
-    //     function (err, resp, body) {
-    //         if (!err && resp.statusCode == 200) {
-    //             console.log(body);
-    //         }
-    //         else {
-    //             console.log('Passed ' + productUrls.length + 'urls');
-    //         }
-    //     }
-    // );
+    request.post(
+        requestUrl,
+        {form: {
+            data: JSON.stringify({product_urls: productUrls}),
+            company: company,
+            category: category,
+            country_code: country_code
+        }},
+        function (err, resp, body) {
+            if (!err && resp.statusCode == 200) {
+                console.log(body);
+            }
+            else {
+                console.log('Passed ' + productUrls.length + 'urls');
+            }
+        }
+    );
     console.log(productUrls);
 }
 
