@@ -10,7 +10,7 @@ var mainUrl = 'http://mediamart.vn';
 var categoryUrls = [
     ['http://mediamart.vn/smartphones', 'mobiles'], // phone
     ['http://mediamart.vn/laptop', 'laptops'], // laptops
-    ['http://mediamart.vn/chuot', 'accessories'] // accessories
+    ['http://mediamart.vn/chuot', 'accessories'], // accessories
     ['http://mediamart.vn/tin-hoc/', 'accessories'] // accessories
 ]
 var page;
@@ -42,6 +42,7 @@ function printDeals(category, productUrls) {
 
 function crawl(i) {
     var productUrls = [];
+    console.log(categoryUrls.length);
     if (i<categoryUrls.length) {
         page = 1;
         startUrl = categoryUrls[i][0];
