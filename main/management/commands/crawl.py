@@ -31,6 +31,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             country_code = args[0]
+            company_name = args[1]
         except IndexError:
             self.stdout.write('Please supply country code')
 
@@ -39,7 +40,8 @@ class Command(BaseCommand):
         count = 0
         if country_code in COUNTRY_CODES:
             product_class = PRODUCT_CLASSES[country_code]
-            urls = CurrentUrl.objects.filter(country=country_code).order_by('-added')[:10]
+            urls = CurrentUrl.objects.filter(
+                country=country_code, company__name=company_name).order_by('-added')[:10]
             while (urls):
                 for url in urls:
                     print url.link
