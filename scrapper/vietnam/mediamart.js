@@ -42,13 +42,13 @@ function printDeals(category, productUrls) {
 
 function crawl(i) {
     var productUrls = [];
-    console.log(categoryUrls.length);
     if (i<categoryUrls.length) {
         page = 1;
         startUrl = categoryUrls[i][0];
         category = categoryUrls[i][1];
         (function loop() {
             request(startUrl, function (err, resp, body) {
+                console.log(startUrl);
                 if (err)
                     throw err;
                 $ = cheerio.load(body);
