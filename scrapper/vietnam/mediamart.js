@@ -34,7 +34,7 @@ function printDeals(category, productUrls) {
                 console.log(body);
             }
             else {
-                console.log('Passed ' + productUrls.length + 'urls');
+                console.log('Passed ' + productUrls.length + ' urls');
             }
         }
     );
@@ -71,6 +71,7 @@ function crawl(i) {
                     loop();
                 } else {
                     printDeals(category, productUrls);
+                    productUrls = [];
                     if ((i+1) < categoryUrls.length)
                         crawl(i+1);
                 }
