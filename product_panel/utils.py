@@ -1,4 +1,5 @@
 from main.utils import unix_to_datetime
+from django.utils.encoding import smart_str
 
 
 def display_product_row(product):
@@ -6,7 +7,7 @@ def display_product_row(product):
     Returns product row to be displayed in datatable listings
     """
     product_id = product[0]
-    title = product[1]
+    title = u'{}'.format(product[1]).encode('utf-8')
     merchant = product[2]
     created = unix_to_datetime(product[3])
     offer_price = product[4]

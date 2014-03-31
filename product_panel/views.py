@@ -37,7 +37,6 @@ class ProductListView(JSONResponseMixin, ListView):
         context = super(ProductListView, self).get_context_data(**kwargs)
         if self.request.is_ajax():
             prod_arr = []
-
             for product in self.products:
                 prod_arr.append(display_product_row(product))
 

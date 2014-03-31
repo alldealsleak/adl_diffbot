@@ -4,10 +4,10 @@ var querystring = require('querystring');
 
 
 var company = 'zalora';
-var country_code = 'sg';
+var countryCode = 'sg';
 
 var mainUrl = 'http://www.zalora.sg';
-var start_url = 'http://www.zalora.sg/beauty/';
+var startUrl = 'http://www.zalora.sg/beauty/';
 var dealUrls = [];
 
 var localhost = 'http://localhost:8000/add-current-urls/';
@@ -20,7 +20,7 @@ function printDeals() {
         {form: {
             data: JSON.stringify({urls: dealUrls}),
             company: company,
-            country_code: country_code
+            country_code: countryCode,
         }},
         function (err, resp, body) {
             if (!err && resp.statusCode == 200) {
@@ -34,7 +34,7 @@ function printDeals() {
 }
 
 (function loop() {
-    request(start_url, function (err, resp, body) {
+    request(startUrl, function (err, resp, body) {
         if (err)
             throw err;
         $ = cheerio.load(body);
@@ -46,7 +46,7 @@ function printDeals() {
         });
 
         if (nextPage) {
-            start_url = 'http://www.zalora.sg' + nextPage;
+            startUrl = mainUrl + nextPage;
             loop();
         } else {
             printDeals();
