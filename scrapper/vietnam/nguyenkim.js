@@ -3,15 +3,17 @@ var cheerio = require('cheerio');
 var querystring = require('querystring');
 
 
-var company = 'mediamart';
+var company = 'nguyenkim';
 var country_code = 'vn';
 
-var mainUrl = 'http://mediamart.vn';
+var mainUrl = 'http://www.nguyenkim.com';
 var categoryUrls = [
-    ['http://mediamart.vn/smartphones', 'mobiles'], // phone
-    ['http://mediamart.vn/laptop', 'laptops'], // laptops
-    ['http://mediamart.vn/chuot', 'accessories'] // accessories
-    ['http://mediamart.vn/tin-hoc/', 'accessories'] // accessories
+    ['http://www.nguyenkim.com/dien-thoai-di-dong/', 'mobiles'], // phone
+    ['http://www.nguyenkim.com/may-tinh-xach-tay/', 'laptops'], // laptops
+    ['http://www.nguyenkim.com/man-hinh-lcd-vi-tinh/', 'monitors'], // monitors
+    ['http://www.nguyenkim.com/may-tinh-de-ban/', 'desktops'], // desktops
+    ['http://www.nguyenkim.com/may-tinh-bang/', 'tablets'], // tablets
+    ['http://www.nguyenkim.com/phu-kien-tin-hoc/', 'accessories'] // accessories
 ]
 var page;
 
@@ -38,6 +40,7 @@ function printDeals(category, productUrls) {
             }
         }
     );
+    console.log(productUrls);
 }
 
 function crawl(i) {
@@ -54,10 +57,10 @@ function crawl(i) {
 
                 page += 1;
                 var hasNextpage = false;
-                $('li.temp-pro-item-li').each(function () {
+                $('div.block_title_sp_home_new > a.product-title').each(function () {
                     hasNextpage = true;
-                    var productUrl = mainUrl + $(this).find('p.name > a.zp').attr('href');
-                    var merchant = $(this).find('p.brand').text();
+                    var productUrl = mainUrl + $(this).attr('href');
+                    var merchant = '';
                     productUrls.push({
                         'url': productUrl,
                         'merchant': merchant
@@ -65,7 +68,8 @@ function crawl(i) {
                 });
 
                 if (hasNextpage) {
-                    nextPage = categoryUrls[i][0] + '?page=' + page;
+                    nextPage = categoryUrls[i][0] + 'page-' + page;
+                    console.log(nextPage);
                     startUrl = nextPage;
                     loop();
                 } else {
@@ -73,7 +77,6 @@ function crawl(i) {
                     if ((i+1) < categoryUrls.length)
                         crawl(i+1);
                 }
-                printDeals(category, productUrls);
             });
         }());
     }
