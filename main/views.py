@@ -26,7 +26,7 @@ def add_current_urls(request):
     category = Category.objects.filter(name__iexact=category_name).first()
 
     idx = 0
-    product_urls = data['product_urls'][idx: idx+1]
+    product_urls = data['product_urls'][idx: idx+10]
 
     while product_urls:
         for product in product_urls:
@@ -38,7 +38,7 @@ def add_current_urls(request):
                 link = product['url']
                 )
         idx += 10
-        # product_urls = data['product_urls'][idx: idx+10]
+        product_urls = data['product_urls'][idx: idx+10]
     context = {
         'data': data['product_urls'],
     }
