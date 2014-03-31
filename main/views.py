@@ -26,20 +26,21 @@ def add_current_urls(request):
     category = Category.objects.filter(name__iexact=category_name).first()
 
     idx = 0
-    product_urls = data['urls'][idx: idx+10]
+    product_urls = data['product_urls'][idx: idx+1]
 
     while product_urls:
-        for url in product_urls:
+        for product in product_urls:
             current_url, created = CurrentUrl.objects.get_or_create(
                 company = company,
                 country = country_code,
                 category = category,
-                link = url
+                merchant = product['merchant'].strip(),
+                link = product['url']
                 )
         idx += 10
-        product_urls = data['urls'][idx: idx+10]
+        # product_urls = data['product_urls'][idx: idx+10]
     context = {
-        'data': data['urls'],
+        'data': data['product_urls'],
     }
     
     return HttpResponse(

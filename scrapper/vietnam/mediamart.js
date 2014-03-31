@@ -3,21 +3,22 @@ var cheerio = require('cheerio');
 var querystring = require('querystring');
 
 
-var company = 'fptshop';
+var company = 'mediamart';
 var country_code = 'vn';
 
-var mainUrl = 'http://fptshop.com.vn';
+var mainUrl = 'http://mediamart.vn';
 var categoryUrls = [
-    ['http://fptshop.com.vn/dien-thoai', 'mobiles'], // phone
-    ['http://fptshop.com.vn/may-tinh-bang-2', 'tablets'], // tablets
-    ['http://fptshop.com.vn/may-tinh-xach-tay', 'laptops'], // laptops
-    ['http://fptshop.com.vn/phu-kien-3', 'accessories'] // laptops
+    ['http://mediamart.vn/smartphones', 'mobiles'], // phone
+    ['http://mediamart.vn/laptop', 'laptops'], // laptops
+    ['http://mediamart.vn/chuot', 'accessories'] // accessories
+    ['http://mediamart.vn/tin-hoc/', 'accessories'] // accessories
 ]
+var page;
 var firstPageStr = '?pagenumber=1&X-Requested-With=XMLHttpRequest'
 
 var localhost = 'http://localhost:8000/add-current-urls/';
 var dev = 'http://128.199.213.210/add-current-urls/';
-var requestUrl = dev;
+var requestUrl = localhost;
 
 
 function printDeals(category, productUrls) {
@@ -38,14 +39,13 @@ function printDeals(category, productUrls) {
             }
         }
     );
-    console.log(productUrls);
 }
-
 
 function crawl(i) {
     var productUrls = [];
     if (i<categoryUrls.length) {
-        startUrl = categoryUrls[i][0] + firstPageStr;
+        page = 1;
+        startUrl = categoryUrls[i][0];
         category = categoryUrls[i][1];
         (function loop() {
             request(startUrl, function (err, resp, body) {
@@ -53,25 +53,28 @@ function crawl(i) {
                     throw err;
                 $ = cheerio.load(body);
 
-                var nextPage = $('a:contains("Tiếp tục")').attr('href');
-
-                $('div.spTextTitle > a').each(function () {
-                    var productUrl = mainUrl + $(this).attr('href');
-                    var merchant = '';
+                page += 1;
+                var hasNextpage = false;
+                $('li.temp-pro-item-li').each(function () {
+                    hasNextpage = true;
+                    var productUrl = mainUrl + $(this).find('p.name > a.zp').attr('href');
+                    var merchant = $(this).find('p.brand').text();
                     productUrls.push({
                         'url': productUrl,
                         'merchant': merchant
                     });
                 });
 
-                if (nextPage) {
-                    startUrl = mainUrl + nextPage;
+                if (hasNextpage) {
+                    nextPage = categoryUrls[i][0] + '?page=' + page;
+                    startUrl = nextPage;
                     loop();
                 } else {
                     printDeals(category, productUrls);
                     if ((i+1) < categoryUrls.length)
                         crawl(i+1);
                 }
+                printDeals(category, productUrls);
             });
         }());
     }

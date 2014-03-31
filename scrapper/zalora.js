@@ -18,7 +18,7 @@ function printDeals() {
     request.post(
         dev,
         {form: {
-            data: JSON.stringify({urls: dealUrls}),
+            data: JSON.stringify({product_urls: dealUrls}),
             company: company,
             country_code: countryCode,
         }},
@@ -42,7 +42,12 @@ function printDeals() {
         var nextPage = $('a[title="Next"]').attr('href');
 
         $('ul#productsCatalog li > a.itm-link').each(function () {
-            dealUrls.push(mainUrl + $(this).attr('href'));
+            var productUrl = mainUrl + $(this).attr('href');
+            var merchant = '';
+            productUrls.push({
+                'url': productUrl,
+                'merchant': merchant
+            });
         });
 
         if (nextPage) {

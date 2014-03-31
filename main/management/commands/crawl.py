@@ -54,17 +54,29 @@ class Command(BaseCommand):
                         )
                         if created:
                             offer_price = product_json.get('offerPrice') if product_json.get('offerPrice') else '0'
+                            offer_price = parse_float_price(offer_price, country_code)
+
                             regular_price = product_json.get('regularPrice') if product_json.get('regularPrice') else '0'
+                            regular_price = parse_float_price(regular_price, country_code)
+
+                            save_amt = product_json.get('saveAmount') if product_json.get('saveAmount') else '0'
+                            save_amt = parse_float_price(save_amt, country_code)
+
                             title = product_json.get('title')
                             description = product_json.get('description') if product_json.get('description') else ''
+                            merchant = url.merchant if url.merchant else product_json.get('brand')
+
+                            if not offer_price and (regular_price and save_amt):
+                                offer_price = regular_price - save_amt
 
                             product.link = url.link
                             product.category = url.category
+                            product.merchant = url.merchant
                             product.title = u'{}'.format(title).encode('utf-8')
                             product.description = u'{}'.format(description).encode('utf-8')
-                            product.offer_price = parse_float_price(offer_price, country_code)
-                            product.regular_price = parse_float_price(regular_price, country_code)
-                            product.merchant = product_json.get('brand') if product_json.get('brand') else ''
+                            product.offer_price = offer_price
+                            product.regular_price = regular_price
+                            product.merchant = merchant
 
                             media_json = product_json.get('media')
 

@@ -39,6 +39,7 @@ class CurrentUrl(models.Model):
     company = models.ForeignKey('Company')
     country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
     category = models.ForeignKey('Category', blank=True, null=True)
+    merchant = models.CharField(max_length=20, blank=True)
     link = models.URLField()
     added = models.DateTimeField(auto_now_add=True)
 

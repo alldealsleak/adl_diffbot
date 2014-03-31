@@ -16,7 +16,7 @@ class CurrentUrlAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_id', 'title', 'category', 'offer_price', 'company', 'link_method', 'image_tag')
-    list_filter = ('category', 'updated', 'created')
+    list_filter = ('company', 'category', 'updated', 'created')
 
     def __init__(self,*args,**kwargs):
         super(ProductAdmin, self).__init__(*args, **kwargs)
