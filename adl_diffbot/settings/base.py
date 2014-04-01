@@ -102,6 +102,6 @@ TEMPLATE_DIRS = (
 )
 
 DIFFBOT_URL = 'http://api.diffbot.com/v2/product'
-DIFFBOT_TOKEN = os.environ.get('ADL_DIFFBOT_TOKEN', '953051970fc6bd63d53ca290c11651e2')
+DIFFBOT_TOKEN = os.environ.get('ADL_DIFFBOT_TOKEN', '720fa1a6586a7333d73472d9e26a9735')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

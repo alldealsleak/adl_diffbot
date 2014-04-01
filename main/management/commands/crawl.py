@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
-
-import json
+import re
 import time
-import urllib
-import urllib2
 
 import diffbot
 
 from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
-from django.utils.encoding import smart_str
+from django.core.management.base import BaseCommand
 
 from main.models import (
     CurrentUrl,
-    Company,
     Media,
-    ProductSingapore,
 )
 from main.utils import (
     COUNTRY_CODES,
@@ -50,8 +44,13 @@ class Command(BaseCommand):
 
                     if product_json:
                         product_json = product_json[0]
+                        if company_name == 'mediamart':
+                            product_id = re.findall('\d+', product_json.get('productId'))[0]
+                        else:
+                            product_id = product_json.get('productId')
+
                         product, created = product_class.objects.get_or_create(
-                            product_id = product_json.get('productId'),
+                            product_id = product_id,
                             company = url.company
                         )
                         if created:
@@ -73,7 +72,7 @@ class Command(BaseCommand):
 
                             product.link = url.link
                             product.category = url.category
-                            product.merchant = url.merchant
+                            product.merchant = merchant
                             product.title = u'{}'.format(title).encode('utf-8')
                             product.description = u'{}'.format(description).encode('utf-8')
                             product.offer_price = offer_price
@@ -94,9 +93,10 @@ class Command(BaseCommand):
                         product.save()
 
                     url.delete()
-                    urls = CurrentUrl.objects.filter(country=country_code)[:10]
                     count += 1
                     time.sleep(1)
+                urls = CurrentUrl.objects.filter(
+                    country=country_code, company__name=company_name).order_by('-added')[:10]
             self.stdout.write('Successfully crawled %s urls' % count)
         else:
             self.stdout.write('Invalid country code')
