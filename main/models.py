@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.encoding import smart_str
 
 
 COUNTRY_CHOICES = (
@@ -16,7 +15,7 @@ class Company(models.Model):
         verbose_name_plural = 'Companies'
 
     def __unicode__(self):
-        return '{}'.format(self.name)
+        return u'{}'.format(self.name)
 
 
 class Category(models.Model):
@@ -29,7 +28,7 @@ class Category(models.Model):
         s = ''
         for i in range(0, self.depth):
             s += '---'
-        return '{}{}'.format(s, self.name)
+        return u'{}{}'.format(s, self.name)
 
     def get_children(self):
         return self.children.all()
@@ -44,7 +43,7 @@ class CurrentUrl(models.Model):
     added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return '{} - {}'.format(self.company.name, self.link)
+        return u'{} - {}'.format(self.company.name, self.link)
         
 
 class Media(models.Model):
@@ -55,7 +54,7 @@ class Media(models.Model):
         verbose_name_plural = 'Media'
 
     def __unicode__(self):
-        return '{} - {}'.format(self.caption, self.link)
+        return u'{} - {}'.format(self.caption, self.link)
 
 
 class Product(models.Model):
@@ -80,13 +79,13 @@ class ProductSingapore(Product):
     company = models.ForeignKey('Company')
 
     def __unicode__(self):
-        return '{} - {}'.format(self.product_id, smart_str(self.title))
+        return u'{} - {}'.format(self.product_id, self.title).encode('utf-8')
 
 
 class ProductVietnam(Product):
     company = models.ForeignKey('Company')
 
     def __unicode__(self):
-        return '{} - {}'.format(self.product_id, smart_str(self.title))
+        return u'{} - {}'.format(self.product_id, self.title).encode('utf-8')
 
 
