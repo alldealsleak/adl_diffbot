@@ -39,62 +39,65 @@ class Command(BaseCommand):
             while (urls):
                 for url in urls:
                     print url.link
-                    data = client.product(url.link)
-                    product_json = data.get('products')
+                    try:
+                        data = client.product(url.link)
+                        product_json = data.get('products')
 
-                    if product_json:
-                        product_json = product_json[0]
-                        if company_name == 'mediamart':
-                            product_id = re.findall('\d+', product_json.get('productId'))[0]
-                        else:
-                            product_id = product_json.get('productId')
+                        if product_json:
+                            product_json = product_json[0]
+                            if company_name == 'mediamart':
+                                product_id = re.findall('\d+', product_json.get('productId'))[0]
+                            else:
+                                product_id = product_json.get('productId')
 
-                        product, created = product_class.objects.get_or_create(
-                            product_id = product_id,
-                            company = url.company
-                        )
-                        if created:
-                            offer_price = product_json.get('offerPrice') if product_json.get('offerPrice') else '0'
-                            offer_price = parse_float_price(offer_price, country_code)
+                            product, created = product_class.objects.get_or_create(
+                                product_id = product_id,
+                                company = url.company
+                            )
+                            if created:
+                                offer_price = product_json.get('offerPrice') if product_json.get('offerPrice') else '0'
+                                offer_price = parse_float_price(offer_price, country_code)
 
-                            regular_price = product_json.get('regularPrice') if product_json.get('regularPrice') else '0'
-                            regular_price = parse_float_price(regular_price, country_code)
+                                regular_price = product_json.get('regularPrice') if product_json.get('regularPrice') else '0'
+                                regular_price = parse_float_price(regular_price, country_code)
 
-                            save_amt = product_json.get('saveAmount') if product_json.get('saveAmount') else '0'
-                            save_amt = parse_float_price(save_amt, country_code)
+                                save_amt = product_json.get('saveAmount') if product_json.get('saveAmount') else '0'
+                                save_amt = parse_float_price(save_amt, country_code)
 
-                            title = product_json.get('title')
-                            description = product_json.get('description') if product_json.get('description') else ''
-                            merchant = url.merchant if url.merchant else product_json.get('brand')
+                                title = product_json.get('title')
+                                description = product_json.get('description') if product_json.get('description') else ''
+                                merchant = url.merchant if url.merchant else product_json.get('brand')
 
-                            if not offer_price and (regular_price and save_amt):
-                                offer_price = regular_price - save_amt
+                                if not offer_price and (regular_price and save_amt):
+                                    offer_price = regular_price - save_amt
 
-                            product.link = url.link
-                            product.category = url.category
-                            product.merchant = merchant
-                            product.title = u'{}'.format(title).encode('utf-8')
-                            product.description = u'{}'.format(description).encode('utf-8')
-                            product.offer_price = offer_price
-                            product.regular_price = regular_price
-                            product.merchant = merchant
+                                product.link = url.link
+                                product.category = url.category
+                                product.merchant = merchant
+                                product.title = u'{}'.format(title).encode('utf-8')
+                                product.description = u'{}'.format(description).encode('utf-8')
+                                product.offer_price = offer_price
+                                product.regular_price = regular_price
+                                product.merchant = merchant
 
-                            media_json = product_json.get('media')
+                                media_json = product_json.get('media')
 
-                            if media_json:
-                                media_json = media_json[0]
-                                media_link = media_json.get('link')
-                                media_caption = media_json.get('caption') if media_json.get('caption') else 'No caption'
-                                media, created = Media.objects.get_or_create(
-                                    caption = media_caption,
-                                    link = media_link
-                                )
-                                product.media = media
-                        product.save()
+                                if media_json:
+                                    media_json = media_json[0]
+                                    media_link = media_json.get('link')
+                                    media_caption = media_json.get('caption') if media_json.get('caption') else 'No caption'
+                                    media, created = Media.objects.get_or_create(
+                                        caption = media_caption,
+                                        link = media_link
+                                    )
+                                    product.media = media
+                            product.save()
 
-                    url.delete()
-                    count += 1
-                    time.sleep(1)
+                        url.delete()
+                        count += 1
+                        time.sleep(1)
+                    except Exception as e:
+                        print e
                 urls = CurrentUrl.objects.filter(
                     country=country_code, company__name=company_name).order_by('-added')[:10]
             self.stdout.write('Successfully crawled %s urls' % count)
