@@ -4,7 +4,6 @@ from django.views.generic import TemplateView, ListView
 
 from main.models import (
     COUNTRY_CHOICES,
-    CurrentUrl,
     Company,
 )
 from main.mixins import JSONResponseMixin
@@ -19,7 +18,6 @@ class ProductListingView(TemplateView):
     template_name = 'product-listings.html'
 
     def get(self, request, *args, **kwargs):
-        countries = COUNTRY_CHOICES
         companies = Company.objects.all()
         context = {
             'countries': COUNTRY_CHOICES,
@@ -54,6 +52,7 @@ class ProductListView(JSONResponseMixin, ListView):
         p_columns = [
             'title',
             'merchant',
+            'main_category.name',
             'created',
             'offer_price',
             'regular_price',
@@ -82,9 +81,12 @@ class ProductListView(JSONResponseMixin, ListView):
         query_str = """
                 SELECT product_id, title, merchant,
                 extract(epoch from {0}.created) as created,
-                offer_price, regular_price, {0}.link, main_media.link
+                offer_price, regular_price, {0}.link, main_media.link,
+                main_category.name
                 FROM {0} LEFT JOIN main_media ON 
                 {0}.media_id=main_media.id
+                JOIN main_category ON
+                {0}.category_id=main_category.id
                 JOIN main_company ON
                 {0}.company_id=main_company.id WHERE
                 {0}.company_id IN ({6})

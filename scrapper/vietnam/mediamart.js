@@ -12,7 +12,7 @@ var categoryUrls = [
     ['http://mediamart.vn/laptop', 'laptops'], // laptops
     ['http://mediamart.vn/chuot', 'accessories'], // accessories
     ['http://mediamart.vn/tin-hoc/', 'accessories'] // accessories
-]
+];
 var page;
 
 var localhost = 'http://localhost:8000/add-current-urls/';
@@ -75,7 +75,6 @@ function crawl(i) {
                     if ((i+1) < categoryUrls.length)
                         crawl(i+1);
                 }
-                printDeals(category, productUrls);
             });
         }());
     }

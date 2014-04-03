@@ -1,12 +1,10 @@
 from main.utils import unix_to_datetime
-from django.utils.encoding import smart_str
 
 
 def display_product_row(product):
     """
     Returns product row to be displayed in datatable listings
     """
-    product_id = product[0]
     title = u'{}'.format(product[1]).encode('utf-8')
     merchant = product[2]
     created = unix_to_datetime(product[3])
@@ -14,6 +12,7 @@ def display_product_row(product):
     regular_price = product[5]
     product_link = product[6]
     media_link = product[7]
+    category = product[8]
 
     title_with_link = '<a href="{}">{}</a>'.format(product_link, title)
     if media_link:
@@ -23,6 +22,7 @@ def display_product_row(product):
     product_data = [
         title_with_link,
         merchant,
+        category,
         created.strftime('%Y-%m-%d'),
         offer_price,
         regular_price,

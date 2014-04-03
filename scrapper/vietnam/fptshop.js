@@ -2,7 +2,6 @@ var request = require('request');
 var cheerio = require('cheerio');
 var querystring = require('querystring');
 
-
 var company = 'fptshop';
 var country_code = 'vn';
 
@@ -12,8 +11,8 @@ var categoryUrls = [
     ['http://fptshop.com.vn/may-tinh-bang-2', 'tablets'], // tablets
     ['http://fptshop.com.vn/may-tinh-xach-tay', 'laptops'], // laptops
     ['http://fptshop.com.vn/phu-kien-3', 'accessories'] // laptops
-]
-var firstPageStr = '?pagenumber=1&X-Requested-With=XMLHttpRequest'
+];
+var firstPageStr = '?pagenumber=1&X-Requested-With=XMLHttpRequest';
 
 var localhost = 'http://localhost:8000/add-current-urls/';
 var dev = 'http://128.199.213.210/add-current-urls/';

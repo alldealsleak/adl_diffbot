@@ -90,7 +90,3 @@ class ProductVietnam(Product):
         return '{} - {}'.format(self.product_id, smart_str(self.title))
 
 
-
-
-
-
