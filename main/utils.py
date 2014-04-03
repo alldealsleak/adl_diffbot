@@ -46,6 +46,8 @@ def unix_to_datetime(unix_timestamp):
 
 
 def parse_float_price(text, country):
+    if not text:
+        return 0.0
     decimal_format_list = ['id','vn']
     text = text.replace(',', '')
 

@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import json
 import time
-import urllib
-import urllib2
 
 import diffbot
 
 from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
-from django.utils.encoding import smart_str
+from django.core.management.base import BaseCommand
 
 from main.models import (
     CurrentUrl,
-    Company,
     Media,
-    ProductSingapore,
 )
 from main.utils import (
     COUNTRY_CODES,

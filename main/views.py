@@ -1,14 +1,20 @@
+import hashlib
 import json
 
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from .models import (
     Category,
-    CurrentUrl,
     Company,
+    CurrentUrl,
+    Media,
+)
+from .utils import (
+    PRODUCT_CLASSES,
+    parse_float_price,
 )
 
 
@@ -16,6 +22,7 @@ class HomeView(TemplateView):
     template_name = 'home.html'
 
 
+@require_POST
 @csrf_exempt
 def add_current_urls(request):
     data = json.loads(request.POST['data'])
@@ -26,7 +33,7 @@ def add_current_urls(request):
     category = Category.objects.filter(name__iexact=category_name).first()
 
     idx = 0
-    product_urls = data['product_urls'][idx: idx+1]
+    product_urls = data['product_urls'][idx: idx+10]
 
     while product_urls:
         for product in product_urls:
@@ -38,13 +45,71 @@ def add_current_urls(request):
                 link = product['url']
                 )
         idx += 10
-        # product_urls = data['product_urls'][idx: idx+10]
+        product_urls = data['product_urls'][idx: idx+10]
     context = {
         'data': data['product_urls'],
     }
     
     return HttpResponse(
         json.dumps(context),
-        content_type='application/json',
-        **response_kwargs
+        content_type='application/json'
     )
+
+
+@require_POST
+@csrf_exempt
+def save_products(request):
+    data = json.loads(request.POST['data'])
+    country_code = request.POST['country_code']
+    category_name = request.POST.get('category', '')
+
+    product_class = PRODUCT_CLASSES[country_code]
+
+    company = Company.objects.get(name__iexact=request.POST['company'])
+    category = Category.objects.filter(name__iexact=category_name).first()
+
+    idx = 0
+    products = data['products'][idx: idx+10]
+
+    while products:
+        for prod in products:
+            url = prod.get('url')
+            product, created = product_class.objects.get_or_create(
+                link = url,
+                company = company,
+            )
+            if created:
+                product_id = prod.get('product_id')
+                if not product_id:
+                    product_id = url.split('/')[-1]
+                    product_id = hashlib.sha224(product_id).hexdigest()
+                title = prod.get('title')
+                description = prod.get('description')
+                product.product_id = product_id
+                product.title = u'{}'.format(title).encode('utf-8')
+                product.category = category
+                product.company = company
+                product.description = u'{}'.format(description).encode('utf-8')
+                product.offer_price = parse_float_price(prod.get('offer_price'), country_code)
+                product.regular_price = parse_float_price(prod.get('regular_price'), country_code)
+                product.merchant = prod.get('merchant')
+
+                if prod.get('media_link'):
+                    media = Media.objects.create(
+                        link=prod.get('media_link'),
+                        caption=prod.get('media_caption')
+                    )
+                    product.media = media
+                product.save()
+        idx += 10
+        products = data['products'][idx: idx+10]
+
+    context = {
+        'data': products,
+    }
+    
+    return HttpResponse(
+        json.dumps(context),
+        content_type='application/json'
+    )
+
