@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import psycopg2
 import re
-import regex
-
-from django.conf import settings
 
 from .models import (
     ProductSingapore,
