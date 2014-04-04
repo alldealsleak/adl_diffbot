@@ -55,7 +55,7 @@ class Command(BaseCommand):
                     product.company.name,
                     product.product_id,
                     product.title,
-                    product.category.name,
+                    product.category.name if product.category else '',
                     product.description,
                     product.offer_price,
                     product.regular_price,
