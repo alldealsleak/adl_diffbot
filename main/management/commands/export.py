@@ -64,7 +64,7 @@ class Command(BaseCommand):
                     product.media.link if product.media else '',
                     product.created,
                 ]
-            ws.append(prod)
+                ws.append(prod)
             idx += 10
             products = product_class.objects.filter(company=company)[idx:idx+10]
 
