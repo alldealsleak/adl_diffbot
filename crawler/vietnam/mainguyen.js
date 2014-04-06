@@ -50,7 +50,7 @@ function crawl (i, productUrls) {
             var mediaLink = mainUrl + $('.cprod_dt_img img').attr('src');
             var mediaCaption = $('.cprod_dt_img img').attr('alt');
 
-            products.push({
+            var product = {
                 'url': url,
                 'title': title,
                 'description': description,
@@ -59,7 +59,10 @@ function crawl (i, productUrls) {
                 'merchant': merchant,
                 'media_link': mediaLink,
                 'media_caption': mediaCaption
-            });
+            };
+            console.log(product.url);
+
+            products.push(product);
 
             if ((i+1) < productUrls.length) {
                 if (products.length > 20)
