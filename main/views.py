@@ -66,7 +66,7 @@ def get_current_urls(request):
     product_urls = list(CurrentUrl.objects.filter(
         country__iexact=country_code,
         company__name__iexact=company_name,
-    ).order_by('-added').values('category__name', 'link', 'merchant'))
+    ).values('category__name', 'link', 'merchant'))
 
     if limit:
         product_urls = product_urls[:int(limit)]
@@ -123,7 +123,7 @@ def save_products(request):
                 if not merchant:
                     merchant = guess_merchant(title)
 
-                product.merchant = prod.get('merchant')
+                product.merchant = merchant
 
                 if prod.get('media_link'):
                     media = Media.objects.create(
