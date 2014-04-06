@@ -14,12 +14,11 @@ var getCurrentUrl = serverUsed + 'get-current-urls/?country_code=' + country_cod
 var saveProductsUrl = serverUsed + 'save-products/';
 
 var products = [];
-function saveProducts () {
-    console.log(products);
+function saveProducts (products_to_be_saved) {
     request.post(
         saveProductsUrl,
         {form: {
-            data: JSON.stringify({products: products}),
+            data: JSON.stringify({products: products_to_be_saved}),
             company: company,
             country_code: country_code
         }},
@@ -62,10 +61,15 @@ function crawl (i, productUrls) {
                 'media_caption': mediaCaption
             });
 
-            if ((i+1) < productUrls.length)
-                saveProducts();
-            else
-                saveProducts();
+            if ((i+1) < productUrls.length) {
+                if (products.length > 20)
+                    saveProducts(products);
+                products = [];
+                crawl(i+1, productUrls);
+            }
+            else {
+                saveProducts(products);
+            }
         });
     }
 }
