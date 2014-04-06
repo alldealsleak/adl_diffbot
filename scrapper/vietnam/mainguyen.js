@@ -47,7 +47,7 @@ var categoryUrls = [
 
 var localhost = 'http://localhost:8000/add-current-urls/';
 var dev = 'http://128.199.213.210/add-current-urls/';
-var requestUrl = localhost;
+var requestUrl = dev;
 
 
 function saveProductUrls(category, productUrls) {
