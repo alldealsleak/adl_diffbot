@@ -15,6 +15,7 @@ from .models import (
 from .utils import (
     PRODUCT_CLASSES,
     JsonResponse,
+    guess_merchant,
     parse_float_price,
 )
 
@@ -102,10 +103,11 @@ def save_products(request):
                         url = url[:len(url)-1]
                     product_id = url.split('/')[-1]
                     product_id = hashlib.sha224(product_id).hexdigest()
-                title = prod.get('title')
+
+                title = u'{}'.format(prod.get('title')).encode('utf-8')
                 description = prod.get('description')
                 product.product_id = product_id
-                product.title = u'{}'.format(title).encode('utf-8')
+                product.title = title
 
                 if prod.get('category'):
                     category = Category.objects.filter(name__iexact=prod.get('category')).first()
@@ -115,13 +117,19 @@ def save_products(request):
                 product.description = u'{}'.format(description).encode('utf-8')
                 product.offer_price = parse_float_price(prod.get('offer_price'), country_code)
                 product.regular_price = parse_float_price(prod.get('regular_price'), country_code)
+
+                merchant = prod.get('merchant')
+
+                if not merchant:
+                    merchant = guess_merchant(title)
+
                 product.merchant = prod.get('merchant')
 
                 if prod.get('media_link'):
                     media = Media.objects.create(
-                        link=prod.get('media_link'),
-                        caption=prod.get('media_caption')
+                        link=prod.get('media_link')
                     )
+                    media.caption =  prod.get('media_caption') if prod.get('media_caption') else ''
                     product.media = media
                 product.save()
             CurrentUrl.objects.filter(link=url).delete()

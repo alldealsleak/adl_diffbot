@@ -7,6 +7,7 @@ import re
 from django.http import HttpResponse
 
 from .models import (
+    Merchant,
     ProductSingapore,
     ProductVietnam,
 )
@@ -71,3 +72,13 @@ def parse_float_price(text, country):
     except IndexError:
         return 0.0
     return float(text)
+
+
+def guess_merchant(title):
+    texts = title.split(' ')
+    merchant = Merchant.objects.filter(name__iregex=r'(' + '|'.join(texts) + ')').first()
+
+    if not merchant:
+        merchant = Merchant.objects.filter(keywords__iregex=r'(' + '|'.join(texts) + ')').first()
+
+    return merchant if merchant else ''
