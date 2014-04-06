@@ -8,7 +8,7 @@ COUNTRY_CHOICES = (
 
 class Merchant(models.Model):
     name = models.CharField(max_length=50)
-    keywords = models.CharField(max_length=200)
+    keywords = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
