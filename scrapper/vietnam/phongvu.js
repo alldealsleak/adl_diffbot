@@ -23,10 +23,10 @@ var categoryUrls = [
 
 var localhost = 'http://localhost:8000/add-current-urls/';
 var dev = 'http://128.199.213.210/add-current-urls/';
-var requestUrl = dev;
+var requestUrl = localhost;
 
 
-function printDeals(category, productUrls) {
+function saveProductUrls(category, productUrls) {
     request.post(
         requestUrl,
         {form: {
@@ -44,7 +44,6 @@ function printDeals(category, productUrls) {
             }
         }
     );
-    console.log(productUrls);
 }
 
 function crawl(i) {
@@ -54,6 +53,7 @@ function crawl(i) {
         category = categoryUrls[i][1];
         (function loop() {
             request(startUrl, function (err, resp, body) {
+                console.log(startUrl);
                 if (err)
                     throw err;
                 $ = cheerio.load(body);
@@ -71,7 +71,7 @@ function crawl(i) {
                     startUrl = mainUrl + nextPage;
                     loop();
                 } else {
-                    printDeals(category, productUrls);
+                    saveProductUrls(category, productUrls);
                     if ((i+1) < categoryUrls.length)
                         crawl(i+1);
                 }
