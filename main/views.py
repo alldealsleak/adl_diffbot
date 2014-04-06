@@ -48,7 +48,7 @@ def add_current_urls(request):
         idx += 10
         product_urls = data['product_urls'][idx: idx+10]
     context = {
-        'data': data['product_urls'],
+        'sucess': True,
     }
     
     return HttpResponse(
