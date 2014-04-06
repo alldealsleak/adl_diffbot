@@ -14,6 +14,7 @@ from .models import (
 )
 from .utils import (
     PRODUCT_CLASSES,
+    JsonResponse,
     parse_float_price,
 )
 
@@ -56,6 +57,18 @@ def add_current_urls(request):
     )
 
 
+def get_current_urls(request):
+    country_code = request.GET.get('country_code')
+    company_name = request.GET.get('company')
+
+    product_urls = list(CurrentUrl.objects.filter(
+        country__iexact=country_code,
+        company__name__iexact=company_name,
+    ).values('category__name', 'link', 'merchant'))
+
+    return JsonResponse(content=product_urls)
+
+
 @require_POST
 @csrf_exempt
 def save_products(request):
@@ -87,7 +100,11 @@ def save_products(request):
                 description = prod.get('description')
                 product.product_id = product_id
                 product.title = u'{}'.format(title).encode('utf-8')
+
+                if prod.get('category'):
+                    category = Category.objects.filter(name__iexact=prod.get('category')).first()
                 product.category = category
+
                 product.company = company
                 product.description = u'{}'.format(description).encode('utf-8')
                 product.offer_price = parse_float_price(prod.get('offer_price'), country_code)
@@ -101,11 +118,12 @@ def save_products(request):
                     )
                     product.media = media
                 product.save()
+            CurrentUrl.objects.filter(link=url).delete()
         idx += 10
         products = data['products'][idx: idx+10]
 
     context = {
-        'data': products,
+        'success': True,
     }
     
     return HttpResponse(

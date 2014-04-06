@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import json
 import re
+
+from django.http import HttpResponse
 
 from .models import (
     ProductSingapore,
@@ -36,6 +39,19 @@ HK_DOLLARS = 'hk'
 VN_DONG = 'vn'
 
 
+class JsonResponse(HttpResponse):
+    """
+        JSON response
+    """
+    def __init__(self, content, mimetype='application/json', status=None,
+                 content_type=None):
+        super(JsonResponse, self).__init__(
+            content=json.dumps(content),
+            mimetype=mimetype,
+            status=status,
+            content_type=content_type,
+        )
+
 
 def unix_to_datetime(unix_timestamp):
     return datetime.datetime.fromtimestamp(int(unix_timestamp))
@@ -51,4 +67,4 @@ def parse_float_price(text, country):
         text = text.replace('.', '')
 
     text = '%s' % re.findall('\d+', text)[0]
-    return float(text)        
+    return float(text)

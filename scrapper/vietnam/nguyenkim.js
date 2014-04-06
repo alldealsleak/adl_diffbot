@@ -14,7 +14,7 @@ var categoryUrls = [
     ['http://www.nguyenkim.com/may-tinh-de-ban/', 'desktops'], // desktops
     ['http://www.nguyenkim.com/may-tinh-bang/', 'tablets'], // tablets
     ['http://www.nguyenkim.com/phu-kien-tin-hoc/', 'accessories'] // accessories
-]
+];
 var page;
 
 var localhost = 'http://localhost:8000/add-current-urls/';

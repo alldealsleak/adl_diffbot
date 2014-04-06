@@ -19,7 +19,7 @@ var categoryUrls = [
     ['http://phongvu.vn/san-pham-apple/ipad-1675c.html', 'tablets'], // tablets
     ['http://phongvu.vn/may-tinh/phu-kien-may-tinh-bang-1618c.html', 'accessories'], // accessories
     ['http://phongvu.vn/thiet-bi-tin-hoc/keyboard-mouse-115c.html', 'accessories'] // accessories
-]
+];
 
 var localhost = 'http://localhost:8000/add-current-urls/';
 var dev = 'http://128.199.213.210/add-current-urls/';

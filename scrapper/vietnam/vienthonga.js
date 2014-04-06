@@ -56,7 +56,7 @@ var dev = 'http://128.199.213.210/save-products/';
 var requestUrl = dev;
 
 
-function printDeals(category, products) {
+function saveProducts(category, products) {
     request.post(
         requestUrl,
         {form: {
@@ -117,7 +117,7 @@ function crawl(i) {
                     startUrl = nextPage;
                     loop();
                 } else {
-                    printDeals(category, products);
+                    saveProducts(category, products);
                     if ((i+1) < categoryUrls.length)
                         crawl(i+1);
                 }
