@@ -66,5 +66,8 @@ def parse_float_price(text, country):
     if country in decimal_format_list:
         text = text.replace('.', '')
 
-    text = '%s' % re.findall('\d+', text)[0]
+    try:
+        text = '%s' % re.findall('\d+', text)[0]
+    except IndexError:
+        return 0.0
     return float(text)
