@@ -65,7 +65,7 @@ def get_current_urls(request):
     product_urls = list(CurrentUrl.objects.filter(
         country__iexact=country_code,
         company__name__iexact=company_name,
-    ).values('category__name', 'link', 'merchant'))
+    ).order_by('-added').values('category__name', 'link', 'merchant'))
 
     if limit:
         product_urls = product_urls[:int(limit)]
@@ -88,47 +88,52 @@ def save_products(request):
     idx = 0
     products = data['products'][idx: idx+10]
 
-    while products:
-        for prod in products:
-            url = prod.get('url')
-            product, created = product_class.objects.get_or_create(
-                link = url,
-                company = company,
-            )
-            if created:
-                product_id = prod.get('product_id')
-                if not product_id:
-                    product_id = url.split('/')[-1]
-                    product_id = hashlib.sha224(product_id).hexdigest()
-                title = prod.get('title')
-                description = prod.get('description')
-                product.product_id = product_id
-                product.title = u'{}'.format(title).encode('utf-8')
+    try:
+        while products:
+            for prod in products:
+                url = prod.get('url')
+                product, created = product_class.objects.get_or_create(
+                    link = url,
+                    company = company,
+                )
+                if created:
+                    product_id = prod.get('product_id')
+                    if not product_id:
+                        product_id = url.split('/')[-1]
+                        product_id = hashlib.sha224(product_id).hexdigest()
+                    title = prod.get('title')
+                    description = prod.get('description')
+                    product.product_id = product_id
+                    product.title = u'{}'.format(title).encode('utf-8')
 
-                if prod.get('category'):
-                    category = Category.objects.filter(name__iexact=prod.get('category')).first()
-                product.category = category
+                    if prod.get('category'):
+                        category = Category.objects.filter(name__iexact=prod.get('category')).first()
+                    product.category = category
 
-                product.company = company
-                product.description = u'{}'.format(description).encode('utf-8')
-                product.offer_price = parse_float_price(prod.get('offer_price'), country_code)
-                product.regular_price = parse_float_price(prod.get('regular_price'), country_code)
-                product.merchant = prod.get('merchant')
+                    product.company = company
+                    product.description = u'{}'.format(description).encode('utf-8')
+                    product.offer_price = parse_float_price(prod.get('offer_price'), country_code)
+                    product.regular_price = parse_float_price(prod.get('regular_price'), country_code)
+                    product.merchant = prod.get('merchant')
 
-                if prod.get('media_link'):
-                    media = Media.objects.create(
-                        link=prod.get('media_link'),
-                        caption=prod.get('media_caption')
-                    )
-                    product.media = media
-                product.save()
-            CurrentUrl.objects.filter(link=url).delete()
-        idx += 10
-        products = data['products'][idx: idx+10]
+                    if prod.get('media_link'):
+                        media = Media.objects.create(
+                            link=prod.get('media_link'),
+                            caption=prod.get('media_caption')
+                        )
+                        product.media = media
+                    product.save()
+                CurrentUrl.objects.filter(link=url).delete()
+            idx += 10
+            products = data['products'][idx: idx+10]
 
-    context = {
-        'success': True,
-    }
+        context = {
+            'success': True,
+        }
+    except Exception as e:
+        context = {
+            'error': e
+        }
     
     return HttpResponse(
         json.dumps(context),
