@@ -10,13 +10,18 @@ var mainUrl = 'http://phongvu.vn';
 var categoryUrls = [
     ['http://phongvu.vn/san-pham-apple/iphone-1676c.html', 'mobiles'], // phone
     ['http://phongvu.vn/dien-thoai/dien-thoai-di-dong-1192c.html', 'mobiles'], // phone
-    ['http://phongvu.vn/may-tinh/phu-kien-may-xach-tay-1163c.html', 'laptops'], // laptops
+
+    ['http://phongvu.vn/may-tinh/may-tinh-xach-tay-laptop-1670c.html', 'laptops'], // laptops
     ['http://phongvu.vn/san-pham-apple/macbook-1253c.html', 'laptops'], // laptops
+
     ['http://phongvu.vn/thiet-bi-tin-hoc/monitor-112c.html', 'monitors'], // monitors
+
     ['http://phongvu.vn/may-tinh/may-tinh-de-ban-pc-336c.html', 'desktops'], // desktops
     ['http://phongvu.vn/san-pham-apple/imac-1604c.html', 'desktops'], // desktops
+
     ['http://phongvu.vn/may-tinh/may-tinh-bang-tablet-1596c.html', 'tablets'], // tablets
     ['http://phongvu.vn/san-pham-apple/ipad-1675c.html', 'tablets'], // tablets
+
     ['http://phongvu.vn/may-tinh/phu-kien-may-tinh-bang-1618c.html', 'accessories'], // accessories
     ['http://phongvu.vn/thiet-bi-tin-hoc/keyboard-mouse-115c.html', 'accessories'] // accessories
 ];
