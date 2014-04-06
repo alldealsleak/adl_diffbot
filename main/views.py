@@ -98,6 +98,8 @@ def save_products(request):
             if created:
                 product_id = prod.get('product_id')
                 if not product_id:
+                    if url[len(url)-1] == '/':
+                        url = url[:len(url)-1]
                     product_id = url.split('/')[-1]
                     product_id = hashlib.sha224(product_id).hexdigest()
                 title = prod.get('title')

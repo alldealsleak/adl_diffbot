@@ -3,7 +3,7 @@ var cheerio = require('cheerio');
 
 var company = 'viettel store';
 var country_code = 'vn';
-var limit = 3;
+var limit = 20;
 
 var mainUrl = 'https://viettelstore.vn';
 var localhost = 'http://localhost:8000/';

@@ -17,5 +17,16 @@ DATABASES = {
         'OPTIONS': {
             'autocommit': True,
         }
+    },
+    'dev': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'adl_diffbot_db',
+        'USER': 'adl_postgres',
+        'PASSWORD': 'Alldealsleak123',
+        'HOST': '128.199.213.210',
+        'PORT': '',
+        'OPTIONS': {
+            'autocommit': True,
+        }
     }
 }
