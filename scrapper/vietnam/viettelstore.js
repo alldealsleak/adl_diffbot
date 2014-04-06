@@ -68,7 +68,7 @@ function crawl(i) {
 
                 console.log(nextPage);
 
-                if (nextPage.indexOf('http') > -1) {
+                if (nextPage && nextPage.indexOf('http') > -1) {
                     startUrl = nextPage;
                     loop();
                 } else {
