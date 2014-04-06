@@ -75,13 +75,20 @@ def parse_float_price(text, country):
 
 
 def guess_merchant(title):
-    texts = title.split(' ')
+    title = title.decode('utf-8', 'ignore')
+    m_name = ''
     try:
-        merchant = Merchant.objects.filter(name__iregex=r'(' + '|'.join(texts) + ')').first()
+        for merchant in Merchant.objects.all():
+            if merchant.name.lower() in title.lower():
+                m_name = merchant.name
+                return m_name
 
-        if not merchant:
-            merchant = Merchant.objects.filter(keywords__iregex=r'(' + '|'.join(texts) + ')').first()
+            keywords = merchant.keywords.split(',')
+            for key in keywords:
+                if key.strip() and key.strip().lower() in title.lower():
+                    m_name = merchant.name
+                    return m_name
     except:
-        merchant = ''
+        m_name = ''
 
-    return merchant.name if merchant else ''
+    return m_name
