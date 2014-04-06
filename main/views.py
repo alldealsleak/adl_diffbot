@@ -60,11 +60,15 @@ def add_current_urls(request):
 def get_current_urls(request):
     country_code = request.GET.get('country_code')
     company_name = request.GET.get('company')
+    limit = request.GET.get('limit')
 
     product_urls = list(CurrentUrl.objects.filter(
         country__iexact=country_code,
         company__name__iexact=company_name,
     ).values('category__name', 'link', 'merchant'))
+
+    if limit:
+        product_urls = product_urls[:int(limit)]
 
     return JsonResponse(content=product_urls)
 

@@ -3,28 +3,31 @@ var cheerio = require('cheerio');
 
 var company = 'mainguyen';
 var country_code = 'vn';
+var limit = 20;
 
 var mainUrl = 'http://www.mainguyen.vn';
 var localhost = 'http://localhost:8000/';
 var dev = 'http://128.199.213.210/';
 
-var serverUsed = dev;
+var serverUsed = localhost;
 
-var getCurrentUrl = serverUsed + 'get-current-urls/?country_code=' + country_code + '&company=' + company;
+var getCurrentUrl = serverUsed + 'get-current-urls/?country_code=' +
+    country_code + '&company=' + company + '&limit=' + limit;
 var saveProductsUrl = serverUsed + 'save-products/';
 
 var products = [];
-function saveProducts (products_to_be_saved) {
+function saveProducts () {
     request.post(
         saveProductsUrl,
         {form: {
-            data: JSON.stringify({products: products_to_be_saved}),
+            data: JSON.stringify({products: products}),
             company: company,
             country_code: country_code
         }},
         function (err, resp, body) {
             if (!err && resp.statusCode == 200) {
-                console.log(body);
+                products = [];
+                getCurrentUrls();
             }
             else {
                 console.log(err);
@@ -65,9 +68,6 @@ function crawl (i, productUrls) {
             products.push(product);
 
             if ((i+1) < productUrls.length) {
-                if (products.length > 20)
-                    saveProducts(products);
-                products = [];
                 crawl(i+1, productUrls);
             }
             else {
@@ -77,14 +77,19 @@ function crawl (i, productUrls) {
     }
 }
 
-request({
-    url: getCurrentUrl,
-    json: true,
-}, function (err, resp, body) {
-    if (!err && resp.statusCode == 200) {
-        crawl (0, body);
-    }
-    else {
-        console.log(err);
-    }
-});
+function getCurrentUrls() {
+    request({
+        url: getCurrentUrl,
+        json: true,
+    }, function (err, resp, body) {
+        if (!err && resp.statusCode == 200) {
+            console.log(body);
+            crawl (0, body);
+        }
+        else {
+            console.log(err);
+        }
+    });
+}
+
+getCurrentUrls();
