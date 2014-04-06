@@ -8,7 +8,7 @@ var mainUrl = 'http://www.mainguyen.vn';
 var localhost = 'http://localhost:8000/';
 var dev = 'http://128.199.213.210/';
 
-var serverUsed = localhost;
+var serverUsed = dev;
 
 var getCurrentUrl = serverUsed + 'get-current-urls/?country_code=' + country_code + '&company=' + company;
 var saveProductsUrl = serverUsed + 'save-products/';
