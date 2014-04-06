@@ -81,4 +81,4 @@ def guess_merchant(title):
     if not merchant:
         merchant = Merchant.objects.filter(keywords__iregex=r'(' + '|'.join(texts) + ')').first()
 
-    return merchant if merchant else ''
+    return merchant.name if merchant else ''
