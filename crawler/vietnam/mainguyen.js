@@ -50,8 +50,8 @@ function crawl (i, productUrls) {
             var title = $('h1.left_block_title').text();
             var description = $('.prod_dt_desc_list').text();
             var offerPrice = $('.prod_dt_price').text();
-            var mediaLink = mainUrl + $('.cprod_dt_img img').attr('src');
-            var mediaCaption = $('.cprod_dt_img img').attr('alt');
+            var mediaLink = mainUrl + $('.prod_dt_col img').attr('src');
+            var mediaCaption = $('.prod_dt_col img').attr('src');
 
             var product = {
                 'url': url,
