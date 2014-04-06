@@ -6,6 +6,15 @@ COUNTRY_CHOICES = (
     ('vn', 'Vietnam'),
 )
 
+class Merchant(models.Model):
+    name = models.CharField(max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return u'{}'.format(self.name).encode('utf-8')
+
+
 class Company(models.Model):
     name = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
@@ -23,6 +32,9 @@ class Category(models.Model):
     depth = models.IntegerField(default=0)
     children = models.ManyToManyField(
         'Category', symmetrical=False, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
 
     def __unicode__(self):
         s = ''
