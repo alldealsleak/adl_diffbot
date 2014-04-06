@@ -4,6 +4,7 @@ from .models import (
     Category,
     Company,
     CurrentUrl,
+    Merchant,
     ProductSingapore,
     ProductVietnam,
 )
@@ -36,5 +37,6 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Company)
 admin.site.register(Category)
 admin.site.register(CurrentUrl, CurrentUrlAdmin)
+admin.site.register(Merchant)
 admin.site.register(ProductSingapore, ProductAdmin)
 admin.site.register(ProductVietnam, ProductAdmin)
