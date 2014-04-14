@@ -105,9 +105,9 @@ def save_products(request):
                     product_id = hashlib.sha224(product_id).hexdigest()
 
                 title = u'{}'.format(prod.get('title')).encode('utf-8')
-                description = prod.get('description')
+                description = prod.get('description').strip()
                 product.product_id = product_id
-                product.title = title
+                product.title = title.strip()
 
                 if prod.get('category'):
                     category = Category.objects.filter(name__iexact=prod.get('category')).first()
