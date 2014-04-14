@@ -8,10 +8,10 @@ var country_code = 'vn';
 
 var mainUrl = 'http://mediamart.vn';
 var categoryUrls = [
-    // ['http://mediamart.vn/smartphones', 'mobiles'], // phone
-    // ['http://mediamart.vn/laptop', 'laptops'], // laptops
-    // ['http://mediamart.vn/chuot', 'accessories'], // accessories
-    // ['http://mediamart.vn/tin-hoc/', 'accessories'], // accessories
+    ['http://mediamart.vn/smartphones', 'mobiles'], // phone
+    ['http://mediamart.vn/laptop', 'laptops'], // laptops
+    ['http://mediamart.vn/chuot', 'accessories'], // accessories
+    ['http://mediamart.vn/tin-hoc/', 'accessories'], // accessories
     ['http://mediamart.vn/may-tinh-bang/', 'tablets'] // accessories
 ];
 var page;

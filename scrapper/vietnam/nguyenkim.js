@@ -9,11 +9,14 @@ var country_code = 'vn';
 var mainUrl = 'http://www.nguyenkim.com';
 var categoryUrls = [
     ['http://www.nguyenkim.com/dien-thoai-di-dong/', 'mobiles'], // phone
-    ['http://www.nguyenkim.com/may-tinh-xach-tay/', 'laptops'], // laptops
-    ['http://www.nguyenkim.com/man-hinh-lcd-vi-tinh/', 'monitors'], // monitors
-    ['http://www.nguyenkim.com/may-tinh-de-ban/', 'desktops'], // desktops
     ['http://www.nguyenkim.com/may-tinh-bang/', 'tablets'], // tablets
-    ['http://www.nguyenkim.com/phu-kien-tin-hoc/', 'accessories'] // accessories
+    ['http://www.nguyenkim.com/may-tinh-xach-tay/', 'laptops'], // laptops
+    ['http://www.nguyenkim.com/may-tinh-de-ban/', 'desktops'], // desktops
+    ['http://www.nguyenkim.com/phu-kien-vien-thong/', 'accessories'], // accessories
+    ['http://www.nguyenkim.com/phu-kien-tin-hoc/', 'accessories'], // accessories
+    ['http://www.nguyenkim.com/man-hinh-lcd-vi-tinh/', 'monitors'], // monitors
+    ['http://www.nguyenkim.com/may-in-van-phong/', 'printers'], // printers
+    ['http://www.nguyenkim.com/may-scan/', 'scanners'] // printers
 ];
 var page;
 
@@ -40,7 +43,6 @@ function printDeals(category, productUrls) {
             }
         }
     );
-    console.log(productUrls);
 }
 
 function crawl(i) {
@@ -50,6 +52,7 @@ function crawl(i) {
         startUrl = categoryUrls[i][0];
         category = categoryUrls[i][1];
         (function loop() {
+            startUrl += '?items_per_page=160';
             request(startUrl, function (err, resp, body) {
                 if (err)
                     throw err;

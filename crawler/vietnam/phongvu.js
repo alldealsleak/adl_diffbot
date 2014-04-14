@@ -3,7 +3,7 @@ var cheerio = require('cheerio');
 
 var company = 'phongvu';
 var country_code = 'vn';
-var limit = 20;
+var limit = 5;
 
 var mainUrl = 'http://phongvu.vn';
 var localhost = 'http://localhost:8000/';

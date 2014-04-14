@@ -23,7 +23,10 @@ var categoryUrls = [
     ['http://phongvu.vn/san-pham-apple/ipad-1675c.html', 'tablets'], // tablets
 
     ['http://phongvu.vn/may-tinh/phu-kien-may-tinh-bang-1618c.html', 'accessories'], // accessories
-    ['http://phongvu.vn/thiet-bi-tin-hoc/keyboard-mouse-115c.html', 'accessories'] // accessories
+    ['http://phongvu.vn/thiet-bi-tin-hoc/keyboard-mouse-115c.html', 'accessories'], // accessories
+    
+    ['http://phongvu.vn/thiet-bi-van-phong/may-in-124c.html', 'printers'], // printers
+    ['http://phongvu.vn/thiet-bi-van-phong/may-scan-125c.html', 'scanners'] // scanners
 ];
 
 var localhost = 'http://localhost:8000/add-current-urls/';
