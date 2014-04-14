@@ -115,8 +115,16 @@ def save_products(request):
 
                 product.company = company
                 product.description = u'{}'.format(description).encode('utf-8')
-                product.offer_price = parse_float_price(prod.get('offer_price'), country_code)
-                product.regular_price = parse_float_price(prod.get('regular_price'), country_code)
+
+                offer_price = parse_float_price(prod.get('offer_price'), country_code)
+                regular_price = parse_float_price(prod.get('regular_price'), country_code)
+                save_amount = parse_float_price(prod.get('save_amount'), country_code)
+
+                if not offer_price and (regular_price and save_amount):
+                    offer_price = regular_price - save_amount
+
+                product.offer_price = offer_price
+                product.regular_price = regular_price
 
                 merchant = prod.get('merchant')
 
