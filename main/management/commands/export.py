@@ -24,6 +24,11 @@ class Command(BaseCommand):
         except IndexError:
             self.stdout.write('Please supply country code and company name')
 
+        try:
+            category_name = args[2]
+        except:
+            category_name = None
+
         product_class = PRODUCT_CLASSES[country_code]
         company = Company.objects.get(name__iexact=company_name)
 
@@ -46,8 +51,21 @@ class Command(BaseCommand):
 
         ws.append(headers)
 
+        date_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        file_path = os.path.join(settings.MEDIA_ROOT, 'exports')
+
         idx = 0
-        products = product_class.objects.filter(company=company)[idx:idx+10]
+
+        if not category_name:
+            products = product_class.objects.filter(company=company)[idx:idx+10]
+            file_name = os.path.join(
+                file_path, 'Product-{0}-{1}.xlsx'.format(company_name, date_str)
+            )
+        else:
+            products = product_class.objects.filter(company=company, category__name=category_name)[idx:idx+10]
+            file_name = os.path.join(
+                file_path, 'Product-{0}-{1}-{2}.xlsx'.format(company_name, category_name, date_str)
+            )
 
         while products:
             for product in products:
@@ -66,13 +84,11 @@ class Command(BaseCommand):
                 ]
                 ws.append(prod)
             idx += 10
-            products = product_class.objects.filter(company=company)[idx:idx+10]
+            if not category_name:
+                products = product_class.objects.filter(company=company)[idx:idx+10]
+            else:
+                products = product_class.objects.filter(company=company, category__name=category_name)[idx:idx+10]
 
-        date_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        file_path = os.path.join(settings.MEDIA_ROOT, 'exports')
-        file_name = os.path.join(
-            file_path, 'Product-{0}-{1}.xlsx'.format(company_name, date_str)
-        )
         wb.save(file_name)
 
         print 'File {} saved'.format(file_name)
