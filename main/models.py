@@ -47,18 +47,6 @@ class Category(models.Model):
         return self.children.all()
 
 
-class CurrentUrl(models.Model):
-    company = models.ForeignKey('Company')
-    country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
-    category = models.ForeignKey('Category', blank=True, null=True)
-    merchant = models.CharField(max_length=20, blank=True)
-    link = models.URLField()
-    added = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return u'{} - {}'.format(self.company.name, self.link)
-        
-
 class Media(models.Model):
     caption = models.CharField(max_length=500, blank=True)
     link = models.URLField(max_length=500)
@@ -68,6 +56,20 @@ class Media(models.Model):
 
     def __unicode__(self):
         return u'{} - {}'.format(self.caption, self.link)
+
+
+class CurrentUrl(models.Model):
+    company = models.ForeignKey('Company')
+    country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
+    category = models.ForeignKey('Category', blank=True, null=True)
+    merchant = models.CharField(max_length=20, blank=True)
+    link = models.URLField()
+    media = models.ForeignKey('Media', blank=True, null=True)
+
+    added = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return u'{} - {}'.format(self.company.name, self.link)
 
 
 class Product(models.Model):

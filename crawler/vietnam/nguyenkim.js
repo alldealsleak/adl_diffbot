@@ -40,6 +40,7 @@ function crawl (i, productUrls) {
     if (i<productUrls.length) {
         var category = productUrls[i].category__name;
         var url = productUrls[i].link;
+        var mediaID = productUrls[i].media;
 
         request(url, function (err, resp, body) {
             if (err)
@@ -49,9 +50,7 @@ function crawl (i, productUrls) {
             var productId = $('p.sku span[id*="product_code"]').text();
             var title = $('div.block_product-title').text();
             var description = $('div#content_description').text();
-            var offerPrice = $('span.price span.price-num:first').text();
-            var mediaLink = mainUrl + $('div.zoomPad').attr('href');
-            var mediaCaption = '';
+            var offerPrice = $('span.price span.price-num').text();
             var merchant = '';
 
             var product = {
@@ -62,8 +61,7 @@ function crawl (i, productUrls) {
                 'category': category,
                 'offer_price': offerPrice,
                 'merchant': merchant,
-                'media_link': mediaLink,
-                'media_caption': mediaCaption
+                'media_id': mediaID
             };
             console.log(product.url);
 

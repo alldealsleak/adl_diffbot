@@ -46,6 +46,13 @@ def add_current_urls(request):
                 merchant = product['merchant'].strip(),
                 link = product['url']
                 )
+            if created and product.get('media_link'):
+                media = Media.objects.create(
+                    link=product.get('media_link')
+                )
+                media.caption =  product.get('media_caption') if product.get('media_caption') else ''
+                current_url.media = media
+                current_url.save()
         idx += 10
         product_urls = data['product_urls'][idx: idx+10]
     context = {
@@ -66,7 +73,7 @@ def get_current_urls(request):
     product_urls = list(CurrentUrl.objects.filter(
         country__iexact=country_code,
         company__name__iexact=company_name,
-    ).values('category__name', 'link', 'merchant'))
+    ).values('category__name', 'link', 'merchant', 'media'))
 
     if limit:
         product_urls = product_urls[:int(limit)]
@@ -138,6 +145,9 @@ def save_products(request):
                         link=prod.get('media_link')
                     )
                     media.caption =  prod.get('media_caption') if prod.get('media_caption') else ''
+                    product.media = media
+                elif prod.get('media_id'):
+                    media = Media.objects.get(id=prod.get('media_id'))
                     product.media = media
                 product.save()
             CurrentUrl.objects.filter(link=url).delete()

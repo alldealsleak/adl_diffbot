@@ -64,9 +64,12 @@ function crawl(i) {
                     hasNextpage = true;
                     var productUrl = mainUrl + $(this).attr('href');
                     var merchant = '';
+                    var mediaLink = mainUrl + $(this).parent().prev().find('img').attr('src');
+
                     productUrls.push({
                         'url': productUrl,
-                        'merchant': merchant
+                        'merchant': merchant,
+                        'media_link': mediaLink
                     });
                 });
 
