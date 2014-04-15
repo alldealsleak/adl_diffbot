@@ -27,17 +27,10 @@ PRODUCT_TABLES = {
     'vn': 'main_productvietnam',
 }
 
-# We define country codes for new currencies
-US_DOLLARS = 'us'
-PE_SOLES = 'pe'
-BR_REALES = 'br'
-SG_DOLLARS = 'sg'
-MY_DOLLARS = 'my'
-PH_PESOS = 'ph'
-ID_RUPIAH = 'id'
-TH_BAHT = 'th'
-HK_DOLLARS = 'hk'
-VN_DONG = 'vn'
+CURRENCY_CODES = {
+    'sg': 'S$',
+    'vn': 'đ',
+}
 
 
 class JsonResponse(HttpResponse):

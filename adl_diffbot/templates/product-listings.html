@@ -21,11 +21,19 @@
                 <li class="active">
                     <a href="#"><i class="fa fa-files-o fa-fw"></i> Companies<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
+                        <li>
+                            <div class="checkbox">
+                                <label>
+                                    <input name="all_companies" type="checkbox" checked>
+                                    All companies
+                                </label>
+                            </div>
+                        </li>
                         {% for company in companies %}
                         <li>
                             <div class="checkbox">
                                 <label>
-                                    <input name="companies" type="checkbox" value="{{ company.id }}" checked>{{ company.name }}
+                                    <input name="companies" type="checkbox" value="{{ company.id }}" checked>{{ company.name|capfirst }}
                                 </label>
                             </div>
                         </li>
@@ -71,9 +79,10 @@
     <thead>
         <tr>
             <th width="25%">Title</th>
-            <th width="15%">Brand</th>
+            <th width="10%">Company</th>
+            <th width="10%">Brand</th>
             <th width="10%">Category</th>
-            <th width="15%">Date</th>
+            <th width="10%">Date</th>
             <th width="10%">Offer Price</th>
             <th width="10%">Regular Price</th>
             <th width="10%">Image</th>

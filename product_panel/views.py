@@ -10,6 +10,7 @@ from main.mixins import JSONResponseMixin
 from main.utils import (
     PRODUCT_CLASSES,
     PRODUCT_TABLES,
+    CURRENCY_CODES,
 )
 from .utils import display_product_row
 
@@ -33,10 +34,11 @@ class ProductListView(JSONResponseMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
+
         if self.request.is_ajax():
             prod_arr = []
             for product in self.products:
-                prod_arr.append(display_product_row(product))
+                prod_arr.append(display_product_row(product, self.country_code))
 
             self.output.update({
                 "sEcho" : int(self.request.GET.get('sEcho', 1)),
@@ -51,6 +53,7 @@ class ProductListView(JSONResponseMixin, ListView):
     def get_queryset(self):
         p_columns = [
             'title',
+            'main_company.name',
             'merchant',
             'main_category.name',
             'created',
@@ -66,9 +69,7 @@ class ProductListView(JSONResponseMixin, ListView):
             company_ids_str = company_ids[0]
         else:
             company_ids_str = '0'
-        country_code = self.request.GET.get('country_code', 'sg')
-
-
+        self.country_code = self.request.GET.get('country_code', 'sg')
 
         i_start = self.request.GET.get('iDisplayStart', 0)
         i_length = self.request.GET.get('iDisplayLength', 10)
@@ -79,7 +80,7 @@ class ProductListView(JSONResponseMixin, ListView):
         cur = connection.cursor()
 
         query_str = """
-                SELECT product_id, title, merchant,
+                SELECT product_id, title, main_company.name, merchant,
                 extract(epoch from {0}.created) as created,
                 offer_price, regular_price, {0}.link, main_media.link,
                 main_category.name
@@ -94,7 +95,7 @@ class ProductListView(JSONResponseMixin, ListView):
                 ORDER BY {4} {5}
                 LIMIT {2} OFFSET {3}
                 """.format(
-                    PRODUCT_TABLES[country_code],
+                    PRODUCT_TABLES[self.country_code],
                     s_search,
                     i_length,
                     i_start,
@@ -105,7 +106,7 @@ class ProductListView(JSONResponseMixin, ListView):
         cur.execute(query_str)
         self.products = cur.fetchall()
 
-        self.total_records = PRODUCT_CLASSES[country_code].objects.filter(
+        self.total_records = PRODUCT_CLASSES[self.country_code].objects.filter(
             title__icontains=s_search, company__in=company_ids
         ).count()
         

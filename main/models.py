@@ -94,13 +94,12 @@ class ProductSingapore(Product):
     company = models.ForeignKey('Company')
 
     def __unicode__(self):
-        return u'{} - {}'.format(self.product_id, self.title).encode('utf-8')
+        return self.product_id + ' - ' + self.title
 
 
 class ProductVietnam(Product):
     company = models.ForeignKey('Company')
 
     def __unicode__(self):
-        return u'{} - {}'.format(self.product_id, self.title).encode('utf-8')
-
+        return self.product_id + ' - ' + self.title
 
